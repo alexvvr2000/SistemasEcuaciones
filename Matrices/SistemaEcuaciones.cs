@@ -6,39 +6,46 @@ using System.Text;
 
 namespace Matrices
 {
-    readonly struct Matriz(double[,] arregloBase)
+    readonly struct Matriz
     {
-        private readonly double[,] arreglo = arregloBase;
-        public readonly int Filas
+        private readonly List<double[]> matrizBase = new List<double[]>();
+        public readonly int numeroFilas;
+        public readonly int numeroColumnas;
+        public readonly Boolean esCuadrada
         {
-            get => arreglo.GetLength(0);
-        }
-        public readonly int Columnas
-        {
-            get => arreglo.GetLength(1);
-        }
-        public readonly Boolean EsCuadrada
-        {
-            get => Filas == Columnas;
+            get => numeroColumnas == numeroFilas;
         }
         public readonly int Orden
         {
             get {
-                if (!EsCuadrada)
+                if (!esCuadrada)
                 {
                     throw new Exception("La matriz no es cuadrada");
                 }
-                return arreglo.GetLength(0);
+                return numeroFilas;
+            }
+        }
+        public Matriz(double[,] matrizOriginal)
+        {
+            this.numeroFilas= matrizOriginal.GetLength(0);
+            this.numeroColumnas = matrizOriginal.GetLength(1);
+            for(int i = 0; i < numeroFilas; i++)
+            {
+                this.matrizBase.Add(new double[numeroColumnas]);
+                for(int j = 0; j < numeroColumnas; j++)
+                {
+                    this.matrizBase[i][j] = matrizOriginal[i,j];
+                }
             }
         }
         private double[,] ObtenerArregloBaseInversa()
         {
-            double[,] arregloBaseInversa= new double[Filas, 2*Columnas];
-            for(int i = 0; i < Filas; i++)
+            double[,] arregloBaseInversa= new double[numeroFilas, 2*numeroColumnas];
+            for(int i = 0; i < numeroFilas; i++)
             {
                 for(int j= 0; j < Orden; j++)
                 {
-                    arregloBaseInversa[i, j] = arreglo[i, j];
+                    arregloBaseInversa[i, j] = this.matrizBase[i][j];
                     if (i == j) {
                         arregloBaseInversa[i, j + Orden] = 1;
                     }
@@ -48,7 +55,7 @@ namespace Matrices
         }
         public Matriz ObtenerInversa()
         {
-            if (!EsCuadrada)
+            if (!esCuadrada)
             {
                 throw new Exception("Esta matriz no aplica para inversa");
             }
@@ -96,10 +103,10 @@ namespace Matrices
         public override string ToString()
         {
             StringBuilder arregloString = new();
-            for(int i = 0; i < Filas;i++) {
-                for(int j = 0; j < Columnas;j++)
+            for(int i = 0; i < numeroFilas;i++) {
+                for(int j = 0; j < numeroColumnas;j++)
                 {
-                    arregloString.Append($"{arreglo[i, j].ToString("F2")},");
+                    arregloString.Append($"{this.matrizBase[i][j].ToString("F2")},");
                 }
                 arregloString.Remove(arregloString.Length - 1,1);
                 arregloString.Append('\n');

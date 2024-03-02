@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Matrices
+﻿namespace Matrices
 {
     internal class Program
     {
