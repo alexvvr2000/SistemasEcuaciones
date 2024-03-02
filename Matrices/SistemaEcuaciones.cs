@@ -84,6 +84,10 @@ namespace Matrices
             }
             set
             {
+                if (value.Length != this.numeroColumnas)
+                {
+                    throw new Exception($"La nueva columna debe ser de longitud {numeroColumnas}");
+                }
                 this.matrizBase[fila] = value;
             }
         }
