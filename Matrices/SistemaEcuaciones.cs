@@ -108,7 +108,7 @@ namespace Matrices
             {
                 throw new Exception("Matriz introducida no es cuadrada");
             }
-            double[,] nuevaMatriz = new double[matrizOriginal.numeroFilas, matrizOriginal.numeroColumnas * 2];
+            Matriz nuevaMatriz = new Matriz(matrizOriginal.numeroFilas, matrizOriginal.numeroColumnas * 2);
             for (int i = 0; i < matrizOriginal.numeroFilas; i++)
             {
                 for(int j = 0; j < matrizOriginal.numeroColumnas; j++)
@@ -117,7 +117,7 @@ namespace Matrices
                     if (i == j) nuevaMatriz[i, j + matrizOriginal.Orden] = 1;
                 }
             }
-            return new Matriz(nuevaMatriz);
+            return nuevaMatriz;
         }
         public Matriz ObtenerInversa()
         {
@@ -140,15 +140,15 @@ namespace Matrices
             return InversaDeBase();
             Matriz InversaDeBase()
             {
-                double[,] nuevaInversa = new double[inversa.numeroFilas, inversa.numeroColumnas/2];
-                for(int i = 0; i < nuevaInversa.GetLength(0); i++)
+                Matriz nuevaInversa = new (inversa.numeroFilas, inversa.numeroColumnas/2);
+                for(int i = 0; i < nuevaInversa.numeroFilas; i++)
                 {
-                    for(int j = 0; j < nuevaInversa.GetLength(1); j++)
+                    for(int j = 0; j < nuevaInversa.numeroColumnas; j++)
                     {
                         nuevaInversa[i, j] = inversa[i, j+inversa.numeroFilas];
                     }
                 }
-                return new Matriz(nuevaInversa);
+                return nuevaInversa;
             }
         }
         public override string ToString()
