@@ -38,20 +38,61 @@ namespace Matrices
                 }
             }
         }
-        private double[,] ObtenerArregloBaseInversa()
+        public Matriz MultiplicarFila(int fila, double multiplo)
         {
-            double[,] arregloBaseInversa= new double[numeroFilas, 2*numeroColumnas];
-            for(int i = 0; i < numeroFilas; i++)
+            for(int i = 0; i < numeroColumnas; i++)
             {
-                for(int j= 0; j < Orden; j++)
+                this.matrizBase[fila][i] *= multiplo;
+            }
+
+            return this;
+        }
+        public Matriz SumarFilas(int filaOrigen, int filaDestino, double multiplo)
+        {
+            for (int i = 0; i < numeroColumnas; i++)
+            {
+                this.matrizBase[filaDestino][i] += multiplo * this.matrizBase[filaOrigen][i];
+            }
+            return this;
+        }
+        public double[] this[int fila]
+        {
+            get
+            {
+                return this.matrizBase[fila];
+            }
+            set
+            {
+                this.matrizBase[fila] = value;
+            }
+        }
+        public double this[int fila, int columna]
+        {
+            get
+            {
+                return this.matrizBase[fila][columna];
+            }
+            set
+            {
+                this.matrizBase[fila][columna] = value;
+            }
+        }
+        public static Matriz AumentarIdentidad(Matriz matrizOriginal)
+        {
+            if (!matrizOriginal.esCuadrada)
+            {
+                throw new Exception("Matriz introducida no es cuadrada");
+            }
+            double[,] nuevaMatriz = new double[matrizOriginal.numeroFilas, matrizOriginal.numeroColumnas * 2];
+            for (int i = 0; i < matrizOriginal.numeroFilas; i++)
+            {
+                for(int j = 0; j < matrizOriginal.numeroColumnas; j++)
                 {
-                    arregloBaseInversa[i, j] = this.matrizBase[i][j];
-                    if (i == j) {
-                        arregloBaseInversa[i, j + Orden] = 1;
-                    }
+                    nuevaMatriz[i, j] = matrizOriginal[i,j];
+                    if (i == j) nuevaMatriz[i, j + matrizOriginal.Orden] = 1;
                 }
             }
-            return arregloBaseInversa;
+            return new Matriz(nuevaMatriz);
         }
         public Matriz ObtenerInversa()
         {
@@ -59,42 +100,27 @@ namespace Matrices
             {
                 throw new Exception("Esta matriz no aplica para inversa");
             }
-            double[,] inversa = this.ObtenerArregloBaseInversa();
+            Matriz inversa = Matriz.AumentarIdentidad(this);
             for(int i = 0; i < Orden; i++)
             {
                 double valorDiagonal = inversa[i, i];
                 if (valorDiagonal == 0) continue;
-                MultiplicarFilas(i, 1 / valorDiagonal);
-                for(int j = 0; j < inversa.GetLength(0); j++)
+                inversa.MultiplicarFila(i, 1 / valorDiagonal);
+                for(int j = 0; j < numeroFilas; j++)
                 {
                     if (i == j) continue;
-                    SumarFilas(i, j, -inversa[j,i]);
+                    inversa.SumarFilas(i, j, -inversa[j,i]);
                 }
             }
             return InversaDeBase();
-
-            void MultiplicarFilas(int fila,double valor)
-            {
-                for(int i = 0; i < inversa.GetLength(1); i++) {
-                    inversa[fila,i] *= valor;
-                }
-            }
-            void SumarFilas(int fila1, int fila2, double multiplo)
-            {
-                for(int i = 0; i < inversa.GetLength(1);i++)
-                {
-                    inversa[fila2,i] += multiplo * inversa[fila1,i];
-                }
-            }
             Matriz InversaDeBase()
             {
-                int orden = inversa.GetLength(0);
-                double[,] nuevaInversa = new double[orden,orden];
-                for(int i = 0; i < orden; i++)
+                double[,] nuevaInversa = new double[inversa.numeroFilas, inversa.numeroColumnas/2];
+                for(int i = 0; i < nuevaInversa.GetLength(0); i++)
                 {
-                    for(int j = 0; j < orden; j++)
+                    for(int j = 0; j < nuevaInversa.GetLength(1); j++)
                     {
-                        nuevaInversa[i,j] = inversa[i,j+orden];
+                        nuevaInversa[i, j] = inversa[i, j+inversa.numeroFilas];
                     }
                 }
                 return new Matriz(nuevaInversa);
