@@ -38,6 +38,27 @@ namespace Matrices
                 }
             }
         }
+        public Matriz(int numeroFilas, int numeroColumnas, double valorInicial = 0)
+        {
+            if(numeroFilas <= 0)
+            {
+                throw new Exception("El numero de filas no es valido");
+            }
+            if(numeroColumnas <= 0)
+            {
+                throw new Exception("El numero de columnas no es valido");
+            }
+            this.numeroColumnas = numeroColumnas;
+            this.numeroFilas = numeroFilas;
+            for(int i = 0; i < numeroFilas; i++)
+            {
+                this.matrizBase.Add(new double[numeroColumnas]);
+                for(int j = 0; j < numeroColumnas; j++)
+                {
+                    this.matrizBase[i][j] = valorInicial;
+                }
+            }
+        }
         public Matriz MultiplicarFila(int fila, double multiplo)
         {
             for(int i = 0; i < numeroColumnas; i++)
@@ -129,7 +150,7 @@ namespace Matrices
         public override string ToString()
         {
             StringBuilder arregloString = new();
-            for(int i = 0; i < numeroFilas;i++) {
+            for (int i = 0; i < numeroFilas;i++) {
                 for(int j = 0; j < numeroColumnas;j++)
                 {
                     arregloString.Append($"{this.matrizBase[i][j].ToString("F2")},");
