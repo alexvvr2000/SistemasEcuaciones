@@ -4,7 +4,7 @@ namespace Matrices
 {
     readonly struct Matriz
     {
-        private readonly List<double[]> matrizBase = new List<double[]>();
+        private readonly double[][] matrizBase;
         public readonly int numeroFilas;
         public readonly int numeroColumnas;
         public readonly Boolean esCuadrada
@@ -18,17 +18,19 @@ namespace Matrices
                 return numeroFilas;
             }
         }
-        public Matriz(double[,] matrizOriginal)
+        public Matriz(double[][] matrizOriginal)
         {
-            this.numeroFilas= matrizOriginal.GetLength(0);
-            this.numeroColumnas = matrizOriginal.GetLength(1);
+            this.numeroFilas= matrizOriginal.Length;
+            this.numeroColumnas = matrizOriginal[0].Length;
+            this.matrizBase = new double[numeroFilas][];
             for(int i = 0; i < numeroFilas; i++)
             {
-                this.matrizBase.Add(new double[numeroColumnas]);
-                for(int j = 0; j < numeroColumnas; j++)
+                if (matrizOriginal[i].Length != this.numeroColumnas)
                 {
-                    this.matrizBase[i][j] = matrizOriginal[i,j];
+                    throw new IndexOutOfRangeException("Las filas deben ser del mismo tamaño");
                 }
+                this.matrizBase[i] = new double[numeroColumnas];
+                matrizOriginal[i].CopyTo(this.matrizBase[i], 0);
             }
         }
         public Matriz(int numeroFilas, int numeroColumnas, double valorInicial = 0)
@@ -43,13 +45,15 @@ namespace Matrices
             }
             this.numeroColumnas = numeroColumnas;
             this.numeroFilas = numeroFilas;
+            this.matrizBase = new double[numeroFilas][];
             for(int i = 0; i < numeroFilas; i++)
             {
-                this.matrizBase.Add(new double[numeroColumnas]);
-                for(int j = 0; j < numeroColumnas; j++)
+                double[] arregloNuevo = new double[numeroColumnas];
+                if (valorInicial != 0)
                 {
-                    this.matrizBase[i][j] = valorInicial;
+                    Array.Fill(arregloNuevo, valorInicial);
                 }
+                this[i] = arregloNuevo;
             }
         }
         public Matriz MultiplicarFila(int fila, double multiplo)
@@ -107,7 +111,7 @@ namespace Matrices
             for (int i = 0; i < numeroFilas;i++) {
                 for(int j = 0; j < numeroColumnas;j++)
                 {
-                    arregloString.Append($"{this.matrizBase[i][j].ToString("F2")},");
+                    arregloString.Append($"{this[i][j].ToString("F2")},");
                 }
                 arregloString.Remove(arregloString.Length - 1,1);
                 arregloString.Append('\n');
