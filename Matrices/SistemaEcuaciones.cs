@@ -11,12 +11,45 @@ namespace Matrices
         {
             get => numeroColumnas == numeroFilas;
         }
-        public int Orden
+        public int orden
         {
             get {
                 if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
                 return numeroFilas;
             }
+        }
+        public double this[int fila, int columna]
+        {
+            get
+            {
+                return this.matrizBase[fila][columna];
+            }
+            set
+            {
+                this.matrizBase[fila][columna] = value;
+            }
+        }
+        public static Matriz ObtenerIdentidad(int orden)
+        {
+            Matriz nuevaMatriz = new Matriz(orden, orden);
+            for (int i = 0; i < orden; i++)
+            {
+                nuevaMatriz[i, i] = 1;
+            }
+            return nuevaMatriz;
+        }
+        public Matriz CambiarFila(double[] filaNueva, int indice)
+        {
+            if (filaNueva.Length != this.numeroColumnas)
+            {
+                throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
+            }
+            filaNueva.CopyTo(this.matrizBase[indice], 0);
+            return this;
+        }
+        public Matriz ObtenerFila(int fila)
+        {
+            return new Matriz(this.matrizBase[fila]);
         }
         public Matriz(double[][] matrizOriginal)
         {
@@ -83,15 +116,15 @@ namespace Matrices
             {
                 throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
-            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.Orden);
+            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
             Matriz matrizAumentada = this.CrearCopia();
-            for (int i = 0; i < matrizAumentada.Orden; i++)
+            for (int i = 0; i < matrizAumentada.orden; i++)
             {
                 double valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0) continue;
                 matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
                 matrizIdentidad.MultiplicarFila(i, 1 / valorDiagonal);
-                for (int j = 0; j < matrizAumentada.Orden; j++)
+                for (int j = 0; j < matrizAumentada.orden; j++)
                 {
                     if (i == j) continue;
                     double escalar = -matrizAumentada[j,i];
@@ -114,40 +147,6 @@ namespace Matrices
             }
             arregloString.Remove(arregloString.Length - 1, 1);
             return arregloString.ToString();
-        }
-        public double[] this[int fila]
-        {
-            set
-            {
-                if(value.Length != this.numeroColumnas)
-                {
-                    throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
-                }
-                this.matrizBase[fila] = value;
-            }
-        }
-        public Matriz obtenerFila(int fila)
-        {
-            return new Matriz(this.matrizBase[fila]);
-        }
-        public double this[int fila, int columna]
-        {
-            get
-            {
-                return this.matrizBase[fila][columna];
-            }
-            set
-            {
-                this.matrizBase[fila][columna] = value;
-            }
-        }
-        public static Matriz ObtenerIdentidad(int orden)
-        {
-            Matriz nuevaMatriz = new Matriz(orden, orden);
-            for (int i = 0; i < orden; i++) {
-                nuevaMatriz[i, i] = 1;
-            }
-            return nuevaMatriz;
         }
         public Matriz CrearCopia()
         {
