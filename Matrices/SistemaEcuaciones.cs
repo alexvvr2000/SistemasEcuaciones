@@ -134,6 +134,10 @@ namespace Matrices
             }
             return matrizIdentidad;
         }
+        public Matriz CrearCopia()
+        {
+            return new Matriz(this.matrizBase);
+        }
         public override string ToString()
         {
             StringBuilder arregloString = new();
@@ -147,10 +151,6 @@ namespace Matrices
             }
             arregloString.Remove(arregloString.Length - 1, 1);
             return arregloString.ToString();
-        }
-        public Matriz CrearCopia()
-        {
-            return new Matriz(this.matrizBase);
         }
     }
 }
