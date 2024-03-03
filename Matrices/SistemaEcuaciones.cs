@@ -7,11 +7,11 @@ namespace Matrices
         private readonly double[][] matrizBase;
         public readonly int numeroFilas;
         public readonly int numeroColumnas;
-        public readonly Boolean esCuadrada
+        public Boolean esCuadrada
         {
             get => numeroColumnas == numeroFilas;
         }
-        public readonly int Orden
+        public int Orden
         {
             get {
                 if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
@@ -53,8 +53,12 @@ namespace Matrices
                 {
                     Array.Fill(arregloNuevo, valorInicial);
                 }
-                this[i] = arregloNuevo;
+                this.matrizBase[i] = arregloNuevo;
             }
+        }
+        public Matriz(double[] matrizOriginal): this(1, matrizOriginal.Length)
+        {
+            this.matrizBase[0] = matrizOriginal;
         }
         public Matriz MultiplicarFila(int fila, double multiplo)
         {
@@ -99,7 +103,7 @@ namespace Matrices
             for (int i = 0; i < numeroFilas;i++) {
                 for(int j = 0; j < numeroColumnas;j++)
                 {
-                    arregloString.Append($"{this[i][j].ToString("F2")},");
+                    arregloString.Append($"{this[i,j].ToString("F2")},");
                 }
                 arregloString.Remove(arregloString.Length - 1,1);
                 arregloString.Append('\n');
@@ -109,18 +113,18 @@ namespace Matrices
         }
         public double[] this[int fila]
         {
-            get
-            {
-                return this.matrizBase[fila];
-            }
             set
             {
-                if (value.Length != this.numeroColumnas)
+                if(value.Length != this.numeroColumnas)
                 {
-                    throw new ArgumentException($"La nueva columna debe ser de longitud {numeroColumnas}");
+                    throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
                 }
                 this.matrizBase[fila] = value;
             }
+        }
+        public Matriz obtenerFila(int fila)
+        {
+            return new Matriz(this.matrizBase[fila]);
         }
         public double this[int fila, int columna]
         {
