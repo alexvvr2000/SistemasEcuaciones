@@ -137,20 +137,11 @@ namespace Matrices
                 this.matrizBase[fila][columna] = value;
             }
         }
-        public static Matriz AumentarIdentidad(Matriz matrizOriginal)
+        public static Matriz ObtenerIdentidad(int orden)
         {
-            if (!matrizOriginal.esCuadrada)
-            {
-                throw new Exception("Matriz introducida no es cuadrada");
-            }
-            Matriz nuevaMatriz = new Matriz(matrizOriginal.numeroFilas, matrizOriginal.numeroColumnas * 2);
-            for (int i = 0; i < matrizOriginal.numeroFilas; i++)
-            {
-                for (int j = 0; j < matrizOriginal.numeroColumnas; j++)
-                {
-                    nuevaMatriz[i, j] = matrizOriginal[i, j];
-                    if (i == j) nuevaMatriz[i, j + matrizOriginal.Orden] = 1;
-                }
+            Matriz nuevaMatriz = new Matriz(orden, orden);
+            for (int i = 0; i < orden; i++) {
+                nuevaMatriz[i, i] = 1;
             }
             return nuevaMatriz;
         }
