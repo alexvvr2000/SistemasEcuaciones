@@ -35,21 +35,33 @@ namespace Matrices
                 this.matrizBase[fila][columna] = value;
             }
         }
-        public Matriz CambiarFila(Double[] filaNueva, Int32 indice)
+        public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
         {
+            if (!this.IndiceValido(indiceFila, 0))
+            {
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
             if (filaNueva.Length != this.numeroColumnas)
             {
                 throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
             }
-            filaNueva.CopyTo(this.matrizBase[indice], 0);
+            filaNueva.CopyTo(this.matrizBase[indiceFila], 0);
             return this;
         }
-        public Matriz ObtenerFila(Int32 fila)
+        public Matriz ObtenerFila(Int32 indiceFila)
         {
-            return new Matriz(this.matrizBase[fila]);
+            if (!this.IndiceValido(indiceFila, 0))
+            {
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
+            return new Matriz(this.matrizBase[indiceFila]);
         }
         public static Matriz ObtenerIdentidad(Int32 orden)
         {
+            if(orden <= 0)
+            {
+                throw new InvalidOperationException("El orden debe ser mayor o igual a 1");
+            }
             Matriz nuevaMatriz = new Matriz(orden, orden);
             for (Int32 i = 0; i < orden; i++)
             {
@@ -99,20 +111,30 @@ namespace Matrices
         {
             this.matrizBase[0] = matrizOriginal;
         }
-        public Matriz MultiplicarFila(Int32 fila, Double multiplo)
+        public Matriz MultiplicarFila(Int32 indiceFila, Double multiplo)
         {
-            for(Int32 i = 0; i < numeroColumnas; i++)
+            if (!this.IndiceValido(indiceFila, 0))
             {
-                this.matrizBase[fila][i] *= multiplo;
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
+            for (Int32 i = 0; i < numeroColumnas; i++)
+            {
+                this.matrizBase[indiceFila][i] *= multiplo;
             }
 
             return this;
         }
-        public Matriz SumarFilas(Int32 filaOrigen, Int32 filaDestino, Double multiplo)
+        public Matriz SumarFilas(Int32 indiceFilaOrigen, Int32 indiceFilaDestino, Double multiplo)
         {
+            Boolean filaOrigenValida = this.IndiceValido(indiceFilaOrigen, 0);
+            Boolean filaDestinoValido = this.IndiceValido(indiceFilaDestino, 0);
+            if (!(filaDestinoValido && filaOrigenValida))
+            {
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
             for (Int32 i = 0; i < numeroColumnas; i++)
             {
-                this.matrizBase[filaDestino][i] += multiplo * this.matrizBase[filaOrigen][i];
+                this.matrizBase[indiceFilaDestino][i] += multiplo * this.matrizBase[indiceFilaOrigen][i];
             }
             return this;
         }
