@@ -117,7 +117,7 @@ namespace Matrices
         }
         public Matriz(Double[] matrizOriginal): this(1, matrizOriginal.Length)
         {
-            this.matrizBase[0] = matrizOriginal;
+            matrizOriginal.CopyTo(matrizBase[0],0);
         }
         public Matriz MultiplicarFila(Int32 indiceFila, Double multiplo)
         {
