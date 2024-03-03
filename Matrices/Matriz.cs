@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Text;
 
-namespace Matrices
+namespace SistemaEcuaciones
 {
     readonly struct Matriz: IEnumerable<Double>
     {

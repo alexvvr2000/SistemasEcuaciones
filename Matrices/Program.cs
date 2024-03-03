@@ -1,4 +1,4 @@
-﻿namespace Matrices
+﻿namespace SistemaEcuaciones
 {
     internal class Program
     {
