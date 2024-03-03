@@ -83,19 +83,23 @@ namespace Matrices
             {
                 throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
-            Matriz matrizAumentada = Matriz.AumentarIdentidad(this);
-            for(int i = 0; i < Orden; i++)
+            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.Orden);
+            Matriz matrizAumentada = this.CrearCopia();
+            for (int i = 0; i < matrizAumentada.Orden; i++)
             {
                 double valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0) continue;
                 matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
-                for(int j = 0; j < numeroFilas; j++)
+                matrizIdentidad.MultiplicarFila(i, 1 / valorDiagonal);
+                for (int j = 0; j < matrizAumentada.Orden; j++)
                 {
                     if (i == j) continue;
-                    matrizAumentada.SumarFilas(i, j, -matrizAumentada[j,i]);
+                    double escalar = -matrizAumentada[j,i];
+                    matrizAumentada.SumarFilas(i, j, escalar);
+                    matrizIdentidad.SumarFilas(i, j, escalar);
                 }
             }
-            return matrizAumentada;
+            return matrizIdentidad;
         }
         public override string ToString()
         {
@@ -144,6 +148,10 @@ namespace Matrices
                 nuevaMatriz[i, i] = 1;
             }
             return nuevaMatriz;
+        }
+        public Matriz CrearCopia()
+        {
+            return new Matriz(this.matrizBase);
         }
     }
 }
