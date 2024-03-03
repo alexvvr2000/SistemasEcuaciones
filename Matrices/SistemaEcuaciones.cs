@@ -143,7 +143,7 @@ namespace Matrices
                     arregloString.Append($"{this[i,j].ToString("F2")},");
                 }
                 arregloString.Remove(arregloString.Length - 1,1);
-                arregloString.Append('\n');
+                arregloString.AppendLine();
             }
             arregloString.Remove(arregloString.Length - 1, 1);
             return arregloString.ToString();
