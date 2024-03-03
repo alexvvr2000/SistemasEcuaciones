@@ -14,10 +14,7 @@ namespace Matrices
         public readonly int Orden
         {
             get {
-                if (!esCuadrada)
-                {
-                    throw new Exception("La matriz no es cuadrada");
-                }
+                if (!esCuadrada) throw new Exception("La matriz no es cuadrada");
                 return numeroFilas;
             }
         }
@@ -72,49 +69,6 @@ namespace Matrices
             }
             return this;
         }
-        public double[] this[int fila]
-        {
-            get
-            {
-                return this.matrizBase[fila];
-            }
-            set
-            {
-                if (value.Length != this.numeroColumnas)
-                {
-                    throw new Exception($"La nueva columna debe ser de longitud {numeroColumnas}");
-                }
-                this.matrizBase[fila] = value;
-            }
-        }
-        public double this[int fila, int columna]
-        {
-            get
-            {
-                return this.matrizBase[fila][columna];
-            }
-            set
-            {
-                this.matrizBase[fila][columna] = value;
-            }
-        }
-        public static Matriz AumentarIdentidad(Matriz matrizOriginal)
-        {
-            if (!matrizOriginal.esCuadrada)
-            {
-                throw new Exception("Matriz introducida no es cuadrada");
-            }
-            Matriz nuevaMatriz = new Matriz(matrizOriginal.numeroFilas, matrizOriginal.numeroColumnas * 2);
-            for (int i = 0; i < matrizOriginal.numeroFilas; i++)
-            {
-                for(int j = 0; j < matrizOriginal.numeroColumnas; j++)
-                {
-                    nuevaMatriz[i, j] = matrizOriginal[i,j];
-                    if (i == j) nuevaMatriz[i, j + matrizOriginal.Orden] = 1;
-                }
-            }
-            return nuevaMatriz;
-        }
         public Matriz ObtenerInversa()
         {
             if (!esCuadrada)
@@ -160,6 +114,49 @@ namespace Matrices
             }
             arregloString.Remove(arregloString.Length - 1, 1);
             return arregloString.ToString();
+        }
+        public double[] this[int fila]
+        {
+            get
+            {
+                return this.matrizBase[fila];
+            }
+            set
+            {
+                if (value.Length != this.numeroColumnas)
+                {
+                    throw new Exception($"La nueva columna debe ser de longitud {numeroColumnas}");
+                }
+                this.matrizBase[fila] = value;
+            }
+        }
+        public double this[int fila, int columna]
+        {
+            get
+            {
+                return this.matrizBase[fila][columna];
+            }
+            set
+            {
+                this.matrizBase[fila][columna] = value;
+            }
+        }
+        public static Matriz AumentarIdentidad(Matriz matrizOriginal)
+        {
+            if (!matrizOriginal.esCuadrada)
+            {
+                throw new Exception("Matriz introducida no es cuadrada");
+            }
+            Matriz nuevaMatriz = new Matriz(matrizOriginal.numeroFilas, matrizOriginal.numeroColumnas * 2);
+            for (int i = 0; i < matrizOriginal.numeroFilas; i++)
+            {
+                for (int j = 0; j < matrizOriginal.numeroColumnas; j++)
+                {
+                    nuevaMatriz[i, j] = matrizOriginal[i, j];
+                    if (i == j) nuevaMatriz[i, j + matrizOriginal.Orden] = 1;
+                }
+            }
+            return nuevaMatriz;
         }
     }
 }
