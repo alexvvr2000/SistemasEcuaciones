@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace SistemaEcuaciones.IteradoresMatrices
 {
-    class IteradorColumnas : IEnumerable<Double>
-    {
-        public IEnumerator<double> GetEnumerator()
+    class IteradorColumnas : IEnumerable<Matriz>
+            {
+        public IEnumerator<Matriz> GetEnumerator()
         {
             throw new NotImplementedException();
         }
