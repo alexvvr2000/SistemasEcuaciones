@@ -24,15 +24,23 @@ namespace Matrices
                 return numeroFilas;
             }
         }
-        public Double this[Int32 fila, Int32 columna]
+        public Double this[Int32 indiceFila, Int32 indiceColumna]
         {
             get
             {
-                return this.matrizBase[fila][columna];
+                if (!this.IndiceValido(indiceFila, indiceColumna))
+                {
+                    throw new IndexOutOfRangeException("Indice de fila no es valido");
+                }
+                return this.matrizBase[indiceFila][indiceColumna];
             }
             set
             {
-                this.matrizBase[fila][columna] = value;
+                if (!this.IndiceValido(indiceFila, indiceColumna))
+                {
+                    throw new IndexOutOfRangeException("Indice de fila no es valido");
+                }
+                this.matrizBase[indiceFila][indiceColumna] = value;
             }
         }
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
