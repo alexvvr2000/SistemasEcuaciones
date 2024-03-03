@@ -29,15 +29,6 @@ namespace Matrices
                 this.matrizBase[fila][columna] = value;
             }
         }
-        public static Matriz ObtenerIdentidad(int orden)
-        {
-            Matriz nuevaMatriz = new Matriz(orden, orden);
-            for (int i = 0; i < orden; i++)
-            {
-                nuevaMatriz[i, i] = 1;
-            }
-            return nuevaMatriz;
-        }
         public Matriz CambiarFila(double[] filaNueva, int indice)
         {
             if (filaNueva.Length != this.numeroColumnas)
@@ -50,6 +41,15 @@ namespace Matrices
         public Matriz ObtenerFila(int fila)
         {
             return new Matriz(this.matrizBase[fila]);
+        }
+        public static Matriz ObtenerIdentidad(int orden)
+        {
+            Matriz nuevaMatriz = new Matriz(orden, orden);
+            for (int i = 0; i < orden; i++)
+            {
+                nuevaMatriz[i, i] = 1;
+            }
+            return nuevaMatriz;
         }
         public Matriz(double[][] matrizOriginal)
         {
