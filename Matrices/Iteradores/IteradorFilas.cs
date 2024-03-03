@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SistemaEcuaciones.IteradoresMatrices
 {
-    class IteradorFilas : IEnumerable<Matriz>
+    public class IteradorFilas : IEnumerable<Matriz>
     {
         private Matriz matrizOriginal;
         IteradorFilas(Matriz matrizOriginal)

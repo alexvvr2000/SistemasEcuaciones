@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SistemaEcuaciones
 {
-    readonly struct Matriz: IEnumerable<Double>
+    public readonly struct Matriz: IEnumerable<Double>
     {
         private readonly Double[][] matrizBase;
         public readonly Int32 numeroFilas;
