@@ -4,21 +4,21 @@ namespace Matrices
 {
     readonly struct Matriz
     {
-        private readonly double[][] matrizBase;
-        public readonly int numeroFilas;
-        public readonly int numeroColumnas;
+        private readonly Double[][] matrizBase;
+        public readonly Int32 numeroFilas;
+        public readonly Int32 numeroColumnas;
         public Boolean esCuadrada
         {
             get => numeroColumnas == numeroFilas;
         }
-        public int orden
+        public Int32 orden
         {
             get {
                 if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
                 return numeroFilas;
             }
         }
-        public double this[int fila, int columna]
+        public Double this[Int32 fila, Int32 columna]
         {
             get
             {
@@ -29,7 +29,7 @@ namespace Matrices
                 this.matrizBase[fila][columna] = value;
             }
         }
-        public Matriz CambiarFila(double[] filaNueva, int indice)
+        public Matriz CambiarFila(Double[] filaNueva, Int32 indice)
         {
             if (filaNueva.Length != this.numeroColumnas)
             {
@@ -38,35 +38,35 @@ namespace Matrices
             filaNueva.CopyTo(this.matrizBase[indice], 0);
             return this;
         }
-        public Matriz ObtenerFila(int fila)
+        public Matriz ObtenerFila(Int32 fila)
         {
             return new Matriz(this.matrizBase[fila]);
         }
-        public static Matriz ObtenerIdentidad(int orden)
+        public static Matriz ObtenerIdentidad(Int32 orden)
         {
             Matriz nuevaMatriz = new Matriz(orden, orden);
-            for (int i = 0; i < orden; i++)
+            for (Int32 i = 0; i < orden; i++)
             {
                 nuevaMatriz[i, i] = 1;
             }
             return nuevaMatriz;
         }
-        public Matriz(double[][] matrizOriginal)
+        public Matriz(Double[][] matrizOriginal)
         {
             this.numeroFilas= matrizOriginal.Length;
             this.numeroColumnas = matrizOriginal[0].Length;
-            this.matrizBase = new double[numeroFilas][];
-            for(int i = 0; i < numeroFilas; i++)
+            this.matrizBase = new Double[numeroFilas][];
+            for(Int32 i = 0; i < numeroFilas; i++)
             {
                 if (matrizOriginal[i].Length != this.numeroColumnas)
                 {
                     throw new IndexOutOfRangeException("Las filas deben ser del mismo tamaño");
                 }
-                this.matrizBase[i] = new double[numeroColumnas];
+                this.matrizBase[i] = new Double[numeroColumnas];
                 matrizOriginal[i].CopyTo(this.matrizBase[i], 0);
             }
         }
-        public Matriz(int numeroFilas, int numeroColumnas, double valorInicial = 0)
+        public Matriz(Int32 numeroFilas, Int32 numeroColumnas, Double valorInicial = 0)
         {
             if(numeroFilas <= 0)
             {
@@ -78,10 +78,10 @@ namespace Matrices
             }
             this.numeroColumnas = numeroColumnas;
             this.numeroFilas = numeroFilas;
-            this.matrizBase = new double[numeroFilas][];
-            for(int i = 0; i < numeroFilas; i++)
+            this.matrizBase = new Double[numeroFilas][];
+            for(Int32 i = 0; i < numeroFilas; i++)
             {
-                double[] arregloNuevo = new double[numeroColumnas];
+                Double[] arregloNuevo = new Double[numeroColumnas];
                 if (valorInicial != 0)
                 {
                     Array.Fill(arregloNuevo, valorInicial);
@@ -89,22 +89,22 @@ namespace Matrices
                 this.matrizBase[i] = arregloNuevo;
             }
         }
-        public Matriz(double[] matrizOriginal): this(1, matrizOriginal.Length)
+        public Matriz(Double[] matrizOriginal): this(1, matrizOriginal.Length)
         {
             this.matrizBase[0] = matrizOriginal;
         }
-        public Matriz MultiplicarFila(int fila, double multiplo)
+        public Matriz MultiplicarFila(Int32 fila, Double multiplo)
         {
-            for(int i = 0; i < numeroColumnas; i++)
+            for(Int32 i = 0; i < numeroColumnas; i++)
             {
                 this.matrizBase[fila][i] *= multiplo;
             }
 
             return this;
         }
-        public Matriz SumarFilas(int filaOrigen, int filaDestino, double multiplo)
+        public Matriz SumarFilas(Int32 filaOrigen, Int32 filaDestino, Double multiplo)
         {
-            for (int i = 0; i < numeroColumnas; i++)
+            for (Int32 i = 0; i < numeroColumnas; i++)
             {
                 this.matrizBase[filaDestino][i] += multiplo * this.matrizBase[filaOrigen][i];
             }
@@ -118,16 +118,16 @@ namespace Matrices
             }
             Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
             Matriz matrizAumentada = this.CrearCopia();
-            for (int i = 0; i < matrizAumentada.orden; i++)
+            for (Int32 i = 0; i < matrizAumentada.orden; i++)
             {
-                double valorDiagonal = matrizAumentada[i, i];
+                Double valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0) continue;
                 matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
                 matrizIdentidad.MultiplicarFila(i, 1 / valorDiagonal);
-                for (int j = 0; j < matrizAumentada.orden; j++)
+                for (Int32 j = 0; j < matrizAumentada.orden; j++)
                 {
                     if (i == j) continue;
-                    double escalar = -matrizAumentada[j,i];
+                    Double escalar = -matrizAumentada[j,i];
                     matrizAumentada.SumarFilas(i, j, escalar);
                     matrizIdentidad.SumarFilas(i, j, escalar);
                 }
@@ -137,8 +137,8 @@ namespace Matrices
         public override string ToString()
         {
             StringBuilder arregloString = new();
-            for (int i = 0; i < numeroFilas;i++) {
-                for(int j = 0; j < numeroColumnas;j++)
+            for (Int32 i = 0; i < numeroFilas;i++) {
+                for(Int32 j = 0; j < numeroColumnas;j++)
                 {
                     arregloString.Append($"{this[i,j].ToString("F2")},");
                 }
