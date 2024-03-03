@@ -14,7 +14,7 @@ namespace Matrices
         public readonly int Orden
         {
             get {
-                if (!esCuadrada) throw new Exception("La matriz no es cuadrada");
+                if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
                 return numeroFilas;
             }
         }
@@ -35,11 +35,11 @@ namespace Matrices
         {
             if(numeroFilas <= 0)
             {
-                throw new Exception("El numero de filas no es valido");
+                throw new ArgumentOutOfRangeException("El numero de filas no es valido");
             }
             if(numeroColumnas <= 0)
             {
-                throw new Exception("El numero de columnas no es valido");
+                throw new ArgumentOutOfRangeException("El numero de columnas no es valido");
             }
             this.numeroColumnas = numeroColumnas;
             this.numeroFilas = numeroFilas;
@@ -73,33 +73,21 @@ namespace Matrices
         {
             if (!esCuadrada)
             {
-                throw new Exception("Esta matriz no aplica para inversa");
+                throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
-            Matriz inversa = Matriz.AumentarIdentidad(this);
+            Matriz matrizAumentada = Matriz.AumentarIdentidad(this);
             for(int i = 0; i < Orden; i++)
             {
-                double valorDiagonal = inversa[i, i];
+                double valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0) continue;
-                inversa.MultiplicarFila(i, 1 / valorDiagonal);
+                matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
                 for(int j = 0; j < numeroFilas; j++)
                 {
                     if (i == j) continue;
-                    inversa.SumarFilas(i, j, -inversa[j,i]);
+                    matrizAumentada.SumarFilas(i, j, -matrizAumentada[j,i]);
                 }
             }
-            return InversaDeBase();
-            Matriz InversaDeBase()
-            {
-                Matriz nuevaInversa = new (inversa.numeroFilas, inversa.numeroColumnas/2);
-                for(int i = 0; i < nuevaInversa.numeroFilas; i++)
-                {
-                    for(int j = 0; j < nuevaInversa.numeroColumnas; j++)
-                    {
-                        nuevaInversa[i, j] = inversa[i, j+inversa.numeroFilas];
-                    }
-                }
-                return nuevaInversa;
-            }
+            return matrizAumentada;
         }
         public override string ToString()
         {
@@ -125,7 +113,7 @@ namespace Matrices
             {
                 if (value.Length != this.numeroColumnas)
                 {
-                    throw new Exception($"La nueva columna debe ser de longitud {numeroColumnas}");
+                    throw new ArgumentException($"La nueva columna debe ser de longitud {numeroColumnas}");
                 }
                 this.matrizBase[fila] = value;
             }
