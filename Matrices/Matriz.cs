@@ -57,6 +57,26 @@ namespace SistemaEcuaciones
             filaNueva.CopyTo(this.matrizBase[indiceFila], 0);
             return this;
         }
+        public Matriz CambiarFila(Matriz nuevaFila, Int32 indiceFila)
+        {
+            if (!this.IndiceValido(indiceFila, 0))
+            {
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
+            if (nuevaFila.numeroFilas != 1)
+            {
+                throw new InvalidOperationException($"Solo puede asignar matrices renglon");
+            }
+            if (nuevaFila.numeroColumnas != this.numeroColumnas)
+            {
+                throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
+            }
+            for (int i = 0; i < nuevaFila.numeroColumnas; i++)
+            {
+                this.matrizBase[indiceFila][i] = nuevaFila[0,i];
+            }
+            return this;
+        }
         public Matriz ObtenerFila(Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
