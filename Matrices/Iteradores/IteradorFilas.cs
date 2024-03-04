@@ -10,7 +10,7 @@ namespace SistemaEcuaciones.IteradoresMatrices
     public class IteradorFilas : IEnumerable<Matriz>
     {
         private Matriz matrizOriginal;
-        IteradorFilas(Matriz matrizOriginal)
+        public IteradorFilas(Matriz matrizOriginal)
         {
             this.matrizOriginal = matrizOriginal;
         }
@@ -22,11 +22,11 @@ namespace SistemaEcuaciones.IteradoresMatrices
         }
         public IEnumerator<Matriz> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.ObtenerFilas();
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
         }
     }
 }
