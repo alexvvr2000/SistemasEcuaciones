@@ -3,47 +3,8 @@ using System.Text;
 
 namespace SistemaEcuaciones
 {
-    public readonly struct Matriz: IEnumerable<Double>
+    public partial struct Matriz: IEnumerable<Double>
     {
-        private readonly Double[][] matrizBase;
-        public readonly Int32 numeroFilas;
-        public readonly Int32 numeroColumnas;
-        private Boolean IndiceValido(Int32 fila, Int32 columna)
-        {
-            Boolean filaValida = fila >= 0 && fila < this.numeroFilas;
-            Boolean columnaValida = columna >= 0 && columna < this.numeroColumnas;
-            return filaValida && columnaValida;
-        }
-        public Boolean esCuadrada
-        {
-            get => numeroColumnas == numeroFilas;
-        }
-        public Int32 orden
-        {
-            get {
-                if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
-                return numeroFilas;
-            }
-        }
-        public Double this[Int32 indiceFila, Int32 indiceColumna]
-        {
-            get
-            {
-                if (!this.IndiceValido(indiceFila, indiceColumna))
-                {
-                    throw new IndexOutOfRangeException("Indice de fila no es valido");
-                }
-                return this.matrizBase[indiceFila][indiceColumna];
-            }
-            set
-            {
-                if (!this.IndiceValido(indiceFila, indiceColumna))
-                {
-                    throw new IndexOutOfRangeException("Indice de fila no es valido");
-                }
-                this.matrizBase[indiceFila][indiceColumna] = value;
-            }
-        }
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
@@ -76,82 +37,6 @@ namespace SistemaEcuaciones
                 this.matrizBase[indiceFila][i] = nuevaFila[0,i];
             }
             return this;
-        }
-        public Matriz ObtenerFila(Int32 indiceFila)
-        {
-            if (!this.IndiceValido(indiceFila, 0))
-            {
-                throw new IndexOutOfRangeException("Indice de fila no es valido");
-            }
-            return new Matriz(this.matrizBase[indiceFila]);
-        }
-        public Matriz ObtenerColumna(Int32 indiceColumna)
-        {
-            if (!this.IndiceValido(0,indiceColumna))
-            {
-                throw new IndexOutOfRangeException($"El indice debe estar entre 0 y {this.numeroColumnas - 1}");
-            }
-            Matriz nuevaMatriz = new Matriz(this.numeroFilas, 1);
-            for(int i = 0; i < this.numeroFilas; i++)
-            {
-                nuevaMatriz[i,0] = this.matrizBase[i][indiceColumna];
-            }
-            return nuevaMatriz;
-        }
-        public static Matriz ObtenerIdentidad(Int32 orden)
-        {
-            if(orden <= 0)
-            {
-                throw new InvalidOperationException("El orden debe ser mayor o igual a 1");
-            }
-            Matriz nuevaMatriz = new Matriz(orden, orden);
-            for (Int32 i = 0; i < orden; i++)
-            {
-                nuevaMatriz[i, i] = 1;
-            }
-            return nuevaMatriz;
-        }
-        public Matriz(Double[][] matrizOriginal)
-        {
-            this.numeroFilas= matrizOriginal.Length;
-            this.numeroColumnas = matrizOriginal[0].Length;
-            this.matrizBase = new Double[numeroFilas][];
-            for(Int32 i = 0; i < numeroFilas; i++)
-            {
-                if (matrizOriginal[i].Length != this.numeroColumnas)
-                {
-                    throw new IndexOutOfRangeException("Las filas deben ser del mismo tamaño");
-                }
-                this.matrizBase[i] = new Double[numeroColumnas];
-                matrizOriginal[i].CopyTo(this.matrizBase[i], 0);
-            }
-        }
-        public Matriz(Int32 numeroFilas, Int32 numeroColumnas, Double valorInicial = 0)
-        {
-            if(numeroFilas <= 0)
-            {
-                throw new ArgumentOutOfRangeException("El numero de filas no es valido");
-            }
-            if(numeroColumnas <= 0)
-            {
-                throw new ArgumentOutOfRangeException("El numero de columnas no es valido");
-            }
-            this.numeroColumnas = numeroColumnas;
-            this.numeroFilas = numeroFilas;
-            this.matrizBase = new Double[numeroFilas][];
-            for(Int32 i = 0; i < numeroFilas; i++)
-            {
-                Double[] arregloNuevo = new Double[numeroColumnas];
-                if (valorInicial != 0)
-                {
-                    Array.Fill(arregloNuevo, valorInicial);
-                }
-                this.matrizBase[i] = arregloNuevo;
-            }
-        }
-        public Matriz(Double[] matrizOriginal): this(1, matrizOriginal.Length)
-        {
-            matrizOriginal.CopyTo(matrizBase[0],0);
         }
         public Matriz MultiplicarFila(Int32 indiceFila, Double multiplo)
         {
@@ -239,6 +124,19 @@ namespace SistemaEcuaciones
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+        public static Matriz ObtenerIdentidad(Int32 orden)
+        {
+            if (orden <= 0)
+            {
+                throw new InvalidOperationException("El orden debe ser mayor o igual a 1");
+            }
+            Matriz nuevaMatriz = new Matriz(orden, orden);
+            for (Int32 i = 0; i < orden; i++)
+            {
+                nuevaMatriz[i, i] = 1;
+            }
+            return nuevaMatriz;
         }
     }
 }
