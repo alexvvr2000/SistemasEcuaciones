@@ -8,7 +8,7 @@ namespace SistemaEcuaciones
         private readonly Double[][] matrizBase;
         public readonly Int32 numeroFilas;
         public readonly Int32 numeroColumnas;
-        public Boolean IndiceValido(Int32 fila, Int32 columna)
+        private Boolean IndiceValido(Int32 fila, Int32 columna)
         {
             Boolean filaValida = fila >= 0 && fila < this.numeroFilas;
             Boolean columnaValida = columna >= 0 && columna < this.numeroColumnas;
