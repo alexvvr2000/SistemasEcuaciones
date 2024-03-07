@@ -65,29 +65,38 @@ namespace SistemaEcuaciones
             }
             return this;
         }
-        public Matriz ObtenerInversa()
+        public Matriz AumentarMatriz(Matriz matrizSistema)
         {
-            if (!esCuadrada)
+            if (!this.esCuadrada)
             {
                 throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
-            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
+            if (matrizSistema.numeroFilas != this.numeroFilas)
+            {
+                throw new InvalidOperationException($"La matriz a aumentar debe tener {this.numeroFilas} filas");
+            }
             Matriz matrizAumentada = this.CrearCopia();
+            Matriz matrizResultado = matrizSistema.CrearCopia();
             for (Int32 i = 0; i < matrizAumentada.orden; i++)
             {
                 Double valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0) continue;
                 matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
-                matrizIdentidad.MultiplicarFila(i, 1 / valorDiagonal);
+                matrizResultado.MultiplicarFila(i, 1 / valorDiagonal);
                 for (Int32 j = 0; j < matrizAumentada.orden; j++)
                 {
                     if (i == j) continue;
-                    Double escalar = -matrizAumentada[j,i];
+                    Double escalar = -matrizAumentada[j, i];
                     matrizAumentada.SumarFilas(i, j, escalar);
-                    matrizIdentidad.SumarFilas(i, j, escalar);
+                    matrizResultado.SumarFilas(i, j, escalar);
                 }
             }
-            return matrizIdentidad;
+            return matrizResultado;
+        }
+        public Matriz ObtenerInversa()
+        {
+            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
+            return this.AumentarMatriz(matrizIdentidad);
         }
         public Matriz CrearCopia()
         {
