@@ -85,6 +85,19 @@ namespace SistemaEcuaciones
             }
             return new Matriz(this.matrizBase[indiceFila]);
         }
+        public Matriz ObtenerColumna(Int32 indiceColumna)
+        {
+            if (!this.IndiceValido(0,indiceColumna))
+            {
+                throw new IndexOutOfRangeException($"El indice debe estar entre 0 y {this.numeroColumnas - 1}");
+            }
+            Matriz nuevaMatriz = new Matriz(this.numeroFilas, 1);
+            for(int i = 0; i < this.numeroFilas; i++)
+            {
+                nuevaMatriz[i,0] = this.matrizBase[i][indiceColumna];
+            }
+            return nuevaMatriz;
+        }
         public static Matriz ObtenerIdentidad(Int32 orden)
         {
             if(orden <= 0)
