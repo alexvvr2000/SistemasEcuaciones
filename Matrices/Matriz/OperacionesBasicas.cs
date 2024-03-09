@@ -28,6 +28,23 @@ namespace SistemaEcuaciones
         {
             return matrizOriginal.CrearCopia();
         }
+        public static Matriz operator -(Matriz matriz1, Matriz matriz2)
+        {
+            return matriz1 + (-1*matriz2);
+        }
+        public static Matriz operator -(Matriz matrizOriginal)
+        {
+            return -1 * matrizOriginal;
+        }
+        public static Matriz operator *(Double escalar,Matriz matrizOriginal)
+        {
+            Matriz matrizNueva = matrizOriginal.CrearCopia();
+            for(int i = 0; i < matrizNueva.numeroFilas; i++)
+            {
+                matrizNueva.MultiplicarFila(i, escalar);
+            }
+            return matrizNueva;
+        }        
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
