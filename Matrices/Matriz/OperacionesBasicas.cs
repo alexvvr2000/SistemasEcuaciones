@@ -5,6 +5,29 @@ namespace SistemaEcuaciones
 {
     public partial struct Matriz: IEnumerable<Double>
     {
+        public static Matriz operator +(Matriz matriz1, Matriz matriz2)
+        {
+            Boolean mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
+            Boolean mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
+            if (!(mismasFilas && mismasColumnas))
+            {
+                throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
+            }
+            double[][] nuevaMatriz = new double[matriz1.numeroFilas][];
+            for(int i = 0; i < matriz1.numeroFilas; i++)
+            {
+                nuevaMatriz[i] = new double[matriz1.numeroColumnas];
+                for (int j = 0; j < matriz1.numeroColumnas; j++)
+                {
+                    nuevaMatriz[i][j] = matriz1[i,j] + matriz2[i,j];
+                }
+            }
+            return new Matriz(nuevaMatriz);
+        }
+        public static Matriz operator +(Matriz matrizOriginal)
+        {
+            return matrizOriginal.CrearCopia();
+        }
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
