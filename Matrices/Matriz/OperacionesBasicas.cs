@@ -44,7 +44,29 @@ namespace SistemaEcuaciones
                 matrizNueva.MultiplicarFila(i, escalar);
             }
             return matrizNueva;
-        }        
+        }
+        public static Matriz operator *(Matriz matriz1, Matriz matriz2)
+        {
+            if(matriz1.numeroColumnas != matriz2.numeroFilas)
+            {
+                throw new ArgumentException("La matriz 1 debe tener la misma cantidad de columnas que de filas en la matriz 2");
+            }
+            Double[,] nuevaMatriz = new Double[matriz1.numeroFilas, matriz2.numeroColumnas];
+            for (int i = 0; i < matriz1.numeroFilas; i++)
+            {
+                for (int j = 0; j < matriz2.numeroColumnas; j++)
+                {
+                    Double suma = 0;
+                    for (int k = 0; k < matriz1.numeroColumnas; k++)
+                    {
+                        suma += matriz1[i, k] * matriz2[k, j];
+                    }
+                    nuevaMatriz[i, j] = suma;
+                }
+            }
+            return new Matriz(nuevaMatriz);
+
+        }
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
