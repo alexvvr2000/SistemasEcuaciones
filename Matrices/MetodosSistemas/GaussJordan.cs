@@ -8,11 +8,11 @@ namespace SistemaEcuaciones
 {
     public partial struct Matriz : IEnumerable<Double>
     {
-        public Matriz AumentarMatriz(Matriz matrizSistema)
+        public (Matriz, Matriz) AumentarMatriz(Matriz matrizSistema)
         {
             if (!this.esCuadrada)
             {
-                throw new InvalidOperationException("Esta matriz no aplica para inversa");
+                throw new InvalidOperationException("Esta matriz no se puede aumentar");
             }
             if (matrizSistema.numeroFilas != this.numeroFilas)
             {
@@ -34,12 +34,17 @@ namespace SistemaEcuaciones
                     matrizResultado.SumarFilas(i, j, escalar);
                 }
             }
-            return matrizResultado;
+            return (matrizAumentada,matrizResultado);
         }
         public Matriz ObtenerInversa()
         {
+            if (!this.esCuadrada)
+            {
+                throw new InvalidOperationException("Esta matriz no aplica para inversa");
+            }
             Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
-            return this.AumentarMatriz(matrizIdentidad);
+            (_, Matriz resultado) = this.AumentarMatriz(matrizIdentidad);
+            return resultado;
         }
         public static Matriz ObtenerIdentidad(Int32 orden)
         {
