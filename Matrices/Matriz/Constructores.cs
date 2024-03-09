@@ -42,6 +42,20 @@ namespace SistemaEcuaciones
                 this.matrizBase[i] = arregloNuevo;
             }
         }
+        public Matriz(Double[,] matrizOriginal)
+        {
+            this.numeroFilas = matrizOriginal.GetLength(0);
+            this.numeroColumnas = matrizOriginal.GetLength(1);
+            this.matrizBase = new double[this.numeroFilas][];
+            for(int i = 0; i < this.numeroFilas; i++)
+            {
+                this.matrizBase[i] = new double[this.numeroColumnas];
+                for(int j = 0; j < this.numeroColumnas; j++)
+                {
+                    this.matrizBase[i][j] = matrizOriginal[i,j];
+                }
+            }
+        }
         public Matriz(Double[] matrizOriginal) : this(1, matrizOriginal.Length)
         {
             matrizOriginal.CopyTo(matrizBase[0], 0);
