@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz : IEnumerable<Double>
+    public partial struct Matriz
     {
         public (Matriz, Matriz) AumentarMatriz(Matriz matrizSistema)
         {

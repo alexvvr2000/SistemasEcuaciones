@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz : IEnumerable<Double>
+    public partial struct Matriz
     {
         private readonly Double[][] matrizBase;
         public readonly Int32 numeroFilas;

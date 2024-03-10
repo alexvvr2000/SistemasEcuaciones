@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz: IEnumerable<Double>
+    public partial struct Matriz
     {
         public static Matriz operator +(Matriz matriz1, Matriz matriz2)
         {

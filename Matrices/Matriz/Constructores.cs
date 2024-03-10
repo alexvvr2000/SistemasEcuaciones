@@ -2,7 +2,7 @@
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz : IEnumerable<Double>
+    public partial struct Matriz
     {
         public Matriz(Double[][] matrizOriginal)
         {
