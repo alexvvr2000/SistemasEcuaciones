@@ -18,8 +18,8 @@ namespace SistemaEcuaciones
             {
                 throw new InvalidOperationException($"La matriz a aumentar debe tener {this.numeroFilas} filas");
             }
-            Matriz matrizAumentada = this.CrearCopia();
-            Matriz matrizResultado = matrizSistema.CrearCopia();
+            Matriz matrizAumentada = (Matriz)this.Clone();
+            Matriz matrizResultado = (Matriz)matrizSistema.Clone();
             for (Int32 i = 0; i < matrizAumentada.orden; i++)
             {
                 Double valorDiagonal = matrizAumentada[i, i];

@@ -26,7 +26,7 @@ namespace SistemaEcuaciones
         }
         public static Matriz operator +(Matriz matrizOriginal)
         {
-            return matrizOriginal.CrearCopia();
+            return (Matriz)matrizOriginal.Clone();
         }
         public static Matriz operator -(Matriz matriz1, Matriz matriz2)
         {
@@ -38,7 +38,7 @@ namespace SistemaEcuaciones
         }
         public static Matriz operator *(Double escalar,Matriz matrizOriginal)
         {
-            Matriz matrizNueva = matrizOriginal.CrearCopia();
+            Matriz matrizNueva = (Matriz)matrizOriginal.Clone();
             for(int i = 0; i < matrizNueva.numeroFilas; i++)
             {
                 matrizNueva.MultiplicarFila(i, escalar);
@@ -66,70 +66,6 @@ namespace SistemaEcuaciones
             }
             return new Matriz(nuevaMatriz);
 
-        }
-        public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
-        {
-            if (!this.IndiceValido(indiceFila, 0))
-            {
-                throw new IndexOutOfRangeException("Indice de fila no es valido");
-            }
-            if (filaNueva.Length != this.numeroColumnas)
-            {
-                throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
-            }
-            filaNueva.CopyTo(this.matrizBase[indiceFila], 0);
-            return this;
-        }
-        public Matriz CambiarFila(Matriz nuevaFila, Int32 indiceFila)
-        {
-            if (!this.IndiceValido(indiceFila, 0))
-            {
-                throw new IndexOutOfRangeException("Indice de fila no es valido");
-            }
-            if (nuevaFila.numeroFilas != 1)
-            {
-                throw new InvalidOperationException($"Solo puede asignar matrices renglon");
-            }
-            if (nuevaFila.numeroColumnas != this.numeroColumnas)
-            {
-                throw new InvalidOperationException($"La nueva columna debe ser de tamaño {this.numeroColumnas}");
-            }
-            for (int i = 0; i < nuevaFila.numeroColumnas; i++)
-            {
-                this.matrizBase[indiceFila][i] = nuevaFila[0,i];
-            }
-            return this;
-        }
-        public Matriz MultiplicarFila(Int32 indiceFila, Double multiplo)
-        {
-            if (!this.IndiceValido(indiceFila, 0))
-            {
-                throw new IndexOutOfRangeException("Indice de fila no es valido");
-            }
-            for (Int32 i = 0; i < numeroColumnas; i++)
-            {
-                this.matrizBase[indiceFila][i] *= multiplo;
-            }
-
-            return this;
-        }
-        public Matriz SumarFilas(Int32 indiceFilaOrigen, Int32 indiceFilaDestino, Double multiplo)
-        {
-            Boolean filaOrigenValida = this.IndiceValido(indiceFilaOrigen, 0);
-            Boolean filaDestinoValido = this.IndiceValido(indiceFilaDestino, 0);
-            if (!(filaDestinoValido && filaOrigenValida))
-            {
-                throw new IndexOutOfRangeException("Indice de fila no es valido");
-            }
-            for (Int32 i = 0; i < numeroColumnas; i++)
-            {
-                this.matrizBase[indiceFilaDestino][i] += multiplo * this.matrizBase[indiceFilaOrigen][i];
-            }
-            return this;
-        }
-        public Matriz CrearCopia()
-        {
-            return new Matriz(this.matrizBase);
         }
         public override string ToString()
         {
