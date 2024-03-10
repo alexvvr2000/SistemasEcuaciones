@@ -8,6 +8,22 @@ namespace SistemaEcuaciones
 {
     partial struct Matriz:ICloneable
     {
+        public Matriz CambiarFila(Int32 filaOrigen, Int32 filaDestino)
+        {
+            bool origenValido = this.IndiceValido(filaOrigen,0);
+            bool destinoValido = this.IndiceValido(filaDestino,0);
+            if (!(origenValido && destinoValido))
+            {
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
+            for (int i = 0; i < this.numeroColumnas; i++)
+            {
+                double valorTemporal = this[filaDestino, i];
+                this[filaDestino, i] = this[filaOrigen, i];
+                this[filaOrigen, i] = valorTemporal;
+            }
+            return this;
+        }
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
@@ -68,7 +84,6 @@ namespace SistemaEcuaciones
             }
             return this;
         }
-
         public object Clone()
         {
             return new Matriz(this.matrizBase);
