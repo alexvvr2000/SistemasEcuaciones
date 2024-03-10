@@ -16,12 +16,9 @@ namespace SistemaEcuaciones
             {
                 throw new IndexOutOfRangeException("Indice de fila no es valido");
             }
-            for (int i = 0; i < this.numeroColumnas; i++)
-            {
-                double valorTemporal = this[filaDestino, i];
-                this[filaDestino, i] = this[filaOrigen, i];
-                this[filaOrigen, i] = valorTemporal;
-            }
+            double[] filaTemporal = this.matrizBase[filaDestino];
+            this.matrizBase[filaDestino] = this.matrizBase[filaOrigen];
+            this.matrizBase[filaOrigen] = filaTemporal;
             return this;
         }
         public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
