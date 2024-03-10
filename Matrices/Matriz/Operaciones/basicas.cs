@@ -1,10 +1,37 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace SistemaEcuaciones
 {
     public partial struct Matriz
     {
+        public override Boolean Equals(object? obj)
+        {
+            if (obj == null) return false;
+            if (!obj.GetType().Equals(this.GetType())) return false;
+            if (obj.GetHashCode() != this.GetHashCode()) return false;
+            return true;
+        }
+        public static Boolean operator !=(Matriz matriz1, Matriz matriz2)
+        {
+            return !(matriz1 == matriz2);
+        }
+        public static Boolean operator ==(Matriz matriz1, Matriz matriz2)
+        {
+            bool mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
+            bool mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
+            if (!(mismasColumnas && mismasFilas)) return false;
+            bool mismosValores = true;
+            for(int i = 0; i < matriz1.numeroFilas; i++)
+            {
+                for(int j = 0; j < matriz1.numeroColumnas; j++)
+                {
+                    if (matriz1[i,j] != matriz2[i,j]) return false;
+                }
+            }
+            return mismosValores;
+        }
         public static Matriz operator +(Matriz matriz1, Matriz matriz2)
         {
             Boolean mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
