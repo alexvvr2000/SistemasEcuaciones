@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz
+    public partial struct Matriz: IEquatable<Matriz>
     {
         public override Boolean Equals(object? obj)
         {
@@ -12,6 +12,14 @@ namespace SistemaEcuaciones
             if (!obj.GetType().Equals(this.GetType())) return false;
             if (obj.GetHashCode() != this.GetHashCode()) return false;
             return true;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        bool IEquatable<Matriz>.Equals(Matriz matriz)
+        {
+            return matriz == this;
         }
         public static Boolean operator !=(Matriz matriz1, Matriz matriz2)
         {
