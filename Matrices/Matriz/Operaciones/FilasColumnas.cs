@@ -5,6 +5,22 @@ namespace SistemaEcuaciones
 {
     partial struct Matriz:ICloneable
     {
+        public Matriz CambiarColumna(Int32 columnaOrigen,Int32 columnaDestino)
+        {
+            bool origenValido = this.IndiceValido(0, columnaOrigen);
+            bool destinoValido = this.IndiceValido(0, columnaDestino);
+            if (!(origenValido && destinoValido))
+            {
+                throw new IndexOutOfRangeException("Indice de fila no es valido");
+            }
+            for (int i = 0; i < this.numeroFilas; i++)
+            {
+                Double valorTemporal = this[i,columnaDestino];
+                this[i, columnaDestino] = this[i, columnaOrigen];
+                this[i, columnaOrigen] = valorTemporal;
+            }
+            return this;
+        }
         public Matriz CambiarFila(Int32 filaOrigen, Int32 filaDestino)
         {
             bool origenValido = this.IndiceValido(filaOrigen,0);
