@@ -25,7 +25,7 @@ namespace SistemaEcuaciones
                 Double valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0)
                 {
-                    Int32? filaDefinidaActual = matrizAumentada.FilaDefinidaMasCercana(i,i);
+                    Int32? filaDefinidaActual = matrizAumentada.FilaDefinidaAlternativa(i,i);
                     if (!filaDefinidaActual.HasValue) continue;
                     matrizAumentada.CambiarFila(i, filaDefinidaActual.Value);
                     matrizResultado.CambiarFila(i, filaDefinidaActual.Value);
@@ -41,7 +41,7 @@ namespace SistemaEcuaciones
             }
             return (matrizAumentada,matrizResultado);
         }
-        public Int32? FilaDefinidaMasCercana(Int32 filaOrigen, Int32 columnaBusqueda)
+        public Int32? FilaDefinidaAlternativa(Int32 filaOrigen, Int32 columnaBusqueda)
         {
             if (!this.IndiceValido(filaOrigen, columnaBusqueda))
             {
