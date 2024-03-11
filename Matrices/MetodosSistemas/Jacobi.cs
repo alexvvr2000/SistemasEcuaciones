@@ -15,7 +15,7 @@ namespace SistemaEcuaciones.MetodosSistemas
             if (!matrizSistema.ObtenerInversa().HasValue) throw new ArgumentException();
             if (matrizResultados.numeroFilas != matrizSistema.numeroFilas) throw new ArgumentException();
             if (matrizResultados.numeroColumnas != 1) throw new ArgumentException();
-            if (valorInicial.numeroFilas != 0) throw new ArgumentException();
+            if (valorInicial.numeroFilas != 1) throw new ArgumentException();
             if (valorInicial.numeroColumnas != matrizSistema.numeroColumnas) throw new ArgumentException();
             this.matrizSistema = (Matriz)matrizSistema.Clone();
             for(int i = 0; i < this.matrizSistema.numeroFilas; i++)
