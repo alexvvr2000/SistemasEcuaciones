@@ -55,15 +55,20 @@ namespace SistemaEcuaciones
             }
             return null;
         }
-        public Matriz ObtenerInversa()
+        public Matriz? ObtenerInversa()
         {
             if (!this.esCuadrada)
             {
                 throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
             Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
-            (_, Matriz resultado) = this.AumentarMatriz(matrizIdentidad);
-            return resultado;
+            (Matriz matrizAumentada, Matriz matrizResultado) = this.AumentarMatriz(matrizIdentidad);
+            for (int i = 0; i < matrizAumentada.orden;i++)
+            {
+                if (matrizAumentada[i, i] != 0) continue;
+                return null;
+            }
+            return matrizResultado;
         }
         public static Matriz ObtenerIdentidad(Int32 orden)
         {
