@@ -23,18 +23,37 @@ namespace SistemaEcuaciones
             for (Int32 i = 0; i < matrizAumentada.orden; i++)
             {
                 Double valorDiagonal = matrizAumentada[i, i];
-                if (valorDiagonal == 0) continue;
-                matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
-                matrizResultado.MultiplicarFila(i, 1 / valorDiagonal);
+                if (valorDiagonal == 0)
+                {
+                    Int32? filaDefinidaActual = matrizAumentada.FilaDefinidaMasCercana(i,i);
+                    if (!filaDefinidaActual.HasValue) continue;
+                    matrizAumentada.CambiarFila(i, filaDefinidaActual.Value);
+                    matrizResultado.CambiarFila(i, filaDefinidaActual.Value);
+                    valorDiagonal = matrizAumentada[i, i];
+                }
                 for (Int32 j = 0; j < matrizAumentada.orden; j++)
                 {
                     if (i == j) continue;
-                    Double escalar = -matrizAumentada[j, i];
+                    Double escalar = -matrizAumentada[j, i]/valorDiagonal;
                     matrizAumentada.SumarFilas(i, j, escalar);
                     matrizResultado.SumarFilas(i, j, escalar);
                 }
             }
             return (matrizAumentada,matrizResultado);
+        }
+        public Int32? FilaDefinidaMasCercana(Int32 filaOrigen, Int32 columnaBusqueda)
+        {
+            if (!this.IndiceValido(filaOrigen, columnaBusqueda))
+            {
+                throw new IndexOutOfRangeException("Coordenada de valor base no valido");
+            }
+            for(int i=0; i < this.numeroFilas; i++)
+            {
+                if (i == filaOrigen) continue;
+                if (this[i, columnaBusqueda] == 0) continue;
+                return i;
+            }
+            return null;
         }
         public Matriz ObtenerInversa()
         {
