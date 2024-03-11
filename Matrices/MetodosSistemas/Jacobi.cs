@@ -14,28 +14,24 @@ namespace SistemaEcuaciones.MetodosSistemas
         private readonly Int32 iteraciones;
         public Jacobi(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
         {
-            if (!matrizSistema.ObtenerInversa().HasValue) throw new ArgumentException();
-            if (matrizResultados.numeroFilas != matrizSistema.numeroFilas) throw new ArgumentException();
-            if (matrizResultados.numeroColumnas != 1) throw new ArgumentException();
-            if (valorInicial.numeroColumnas != 1) throw new ArgumentException();
-            if (valorInicial.numeroFilas != matrizSistema.numeroColumnas) throw new ArgumentException();
-            if (iteraciones <= 0) throw new ArgumentOutOfRangeException();
+            if (!matrizSistema.ObtenerInversa().HasValue) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
+            if (matrizResultados.numeroFilas != matrizSistema.numeroFilas) throw new ArgumentException($"El vector de resultados debe tener {matrizSistema.numeroFilas} filas");
+            if (matrizResultados.numeroColumnas != 1) throw new ArgumentException("Solo puede usarse con un solo vector de resultados");
+            if (valorInicial.numeroColumnas != 1) throw new ArgumentException("El valor inicial debe ser un vector columna");
+            if (valorInicial.numeroFilas != matrizSistema.numeroColumnas) throw new ArgumentException("La cantidad de componentes no es igual a las dimensiones del sistema");
+            if (iteraciones <= 0) throw new ArgumentOutOfRangeException("Debe ser 1 o mas iteraciones");
             this.matrizSistema = (Matriz)matrizSistema.Clone();
             this.matrizResultados = matrizResultados;
             this.valorInicial = valorInicial;
             this.iteraciones = iteraciones;
             for (int i = 0; i < this.matrizSistema.numeroFilas; i++)
             {
-                Double sumaFila = obtenerSumaAbsFila(i);
+                Double valorComparado = Math.Abs(this.matrizSistema[i,i]);
                 for (int j = 0; j < this.matrizSistema.numeroColumnas; j++)
                 {
-                    Double valorActual = this.matrizSistema[i, j];
-                    if ((Math.Abs(valorActual) - sumaFila) >= 0)
-                    {
-                        Console.WriteLine(valorActual);
-                        this.matrizSistema.CambiarColumna(j, i);
-                        break;
-                    }
+                    if (j == i) continue;
+                    if (valorComparado > this.matrizSistema[i, j]) continue;
+                    throw new ArgumentException("El sistema de ecuaciones no convergera");
                 }
             }
         }
@@ -82,16 +78,6 @@ namespace SistemaEcuaciones.MetodosSistemas
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
-        }
-        private Double obtenerSumaAbsFila(Int32 indiceFila)
-        {
-            Matriz fila = this.matrizSistema.ObtenerFila(indiceFila);
-            Double total = 0;
-            foreach (Double valor in fila)
-            {
-                total += Math.Abs(valor);
-            }
-            return total;
         }
     }
 }
