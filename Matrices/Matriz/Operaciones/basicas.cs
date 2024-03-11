@@ -47,13 +47,12 @@ namespace SistemaEcuaciones
             {
                 throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
             }
-            double[][] nuevaMatriz = new double[matriz1.numeroFilas][];
+            double[,] nuevaMatriz = new double[matriz1.numeroFilas,matriz1.numeroColumnas];
             for(int i = 0; i < matriz1.numeroFilas; i++)
             {
-                nuevaMatriz[i] = new double[matriz1.numeroColumnas];
                 for (int j = 0; j < matriz1.numeroColumnas; j++)
                 {
-                    nuevaMatriz[i][j] = matriz1[i,j] + matriz2[i,j];
+                    nuevaMatriz[i,j] = matriz1[i,j] + matriz2[i,j];
                 }
             }
             return new Matriz(nuevaMatriz);
@@ -64,7 +63,21 @@ namespace SistemaEcuaciones
         }
         public static Matriz operator -(Matriz matriz1, Matriz matriz2)
         {
-            return matriz1 + (-1*matriz2);
+            Boolean mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
+            Boolean mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
+            if (!(mismasFilas && mismasColumnas))
+            {
+                throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
+            }
+            double[,] nuevaMatriz = new double[matriz1.numeroFilas,matriz1.numeroColumnas];
+            for (int i = 0; i < matriz1.numeroFilas; i++)
+            {
+                for (int j = 0; j < matriz1.numeroColumnas; j++)
+                {
+                    nuevaMatriz[i,j] = matriz1[i, j] - matriz2[i, j];
+                }
+            }
+            return new Matriz(nuevaMatriz);
         }
         public static Matriz operator -(Matriz matrizOriginal)
         {
