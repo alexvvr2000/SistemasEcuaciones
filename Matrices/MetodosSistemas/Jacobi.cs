@@ -27,13 +27,22 @@ namespace SistemaEcuaciones.MetodosSistemas
             for (int i = 0; i < this.matrizSistema.numeroFilas; i++)
             {
                 Double valorComparado = Math.Abs(this.matrizSistema[i,i]);
-                for (int j = 0; j < this.matrizSistema.numeroColumnas; j++)
+                if (!(valorComparado > this.sumaFilaAbsoluta(i, i)))
                 {
-                    if (j == i) continue;
-                    if (valorComparado > this.matrizSistema[i, j]) continue;
                     throw new ArgumentException("El sistema de ecuaciones no convergera");
                 }
             }
+        }
+        private Double sumaFilaAbsoluta(Int32 filaObjetivo, Int32 columnaExcluida)
+        {
+            Matriz filaSuma = this.matrizSistema.ObtenerFila(filaObjetivo);
+            Double sumaAbsoluta = 0;
+            for (int i = 0; i < filaSuma.numeroColumnas; i++)
+            {
+                if (i == columnaExcluida) continue;
+                sumaAbsoluta += Math.Abs(filaSuma[0,i]);
+            }
+            return sumaAbsoluta;
         }
         private IEnumerator<ResultadoIteracionJacobi> AproximarSolucion(){
             Matriz solucionAnterior = this.valorInicial;
