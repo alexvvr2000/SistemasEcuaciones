@@ -41,6 +41,44 @@ namespace SistemaEcuaciones
                 return true;
             }
         }
+        public Double determinante
+        {
+            get
+            {
+                if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
+                Matriz copia = (Matriz)this.Clone();
+                Double determinanteTotal = 1;
+                for (int i = 0; i < copia.numeroColumnas; i++)
+                {
+                    Double valorDiagonal = copia[i, i];
+                    if(valorDiagonal == 0)
+                    {
+                        Int32? filaCambio = copia.ObtenerFilaValidaAbajo(i,i);
+                        if (!filaCambio.HasValue) return 0;
+                        copia.CambiarColumna(filaCambio.Value, i);
+                        valorDiagonal = copia[i,i];
+                    }
+                    for (int j = i + 1; j < copia.numeroFilas; j++)
+                    {
+                        Double escalar = -copia[j, i] / valorDiagonal;
+                        copia.SumarFilas(i,j,escalar);
+                    }
+                    determinanteTotal *= valorDiagonal;
+                }
+                return determinanteTotal;
+            }
+        }
+        private Int32? ObtenerFilaValidaAbajo(Int32 filaInicial, Int32 columnaBusqueda)
+        {
+            if (!this.esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
+            if (!this.IndiceValido(filaInicial, columnaBusqueda)) throw new IndexOutOfRangeException("No se introdujo una coordenada valida");
+            if (filaInicial == (this.numeroFilas - 1)) return null;
+            for (int i = filaInicial; i < this.orden; i++)
+            {
+                if (this[i, columnaBusqueda] != 0) return i;
+            }
+            return null;
+        }
         private Double sumaFilaAbsoluta(Int32 filaObjetivo, Int32 columnaExcluida)
         {
             Double sumaAbsoluta = 0;
