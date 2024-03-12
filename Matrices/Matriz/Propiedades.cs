@@ -25,6 +25,32 @@ namespace SistemaEcuaciones
                 return numeroFilas;
             }
         }
+        public Boolean esDominante
+        {
+            get
+            {
+                if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
+                for (int i = 0; i < this.numeroFilas; i++)
+                {
+                    Double valorComparado = Math.Abs(this[i, i]);
+                    if (!(valorComparado > this.sumaFilaAbsoluta(i, i)))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        private Double sumaFilaAbsoluta(Int32 filaObjetivo, Int32 columnaExcluida)
+        {
+            Double sumaAbsoluta = 0;
+            for (int i = 0; i < this.numeroColumnas; i++)
+            {
+                if (i == columnaExcluida) continue;
+                sumaAbsoluta += Math.Abs(this[0, i]);
+            }
+            return sumaAbsoluta;
+        }
         public Double this[Int32 indiceFila, Int32 indiceColumna]
         {
             get

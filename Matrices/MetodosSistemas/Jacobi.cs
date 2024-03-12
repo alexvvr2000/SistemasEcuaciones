@@ -15,6 +15,7 @@ namespace SistemaEcuaciones.MetodosSistemas
         public Jacobi(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
         {
             if (!matrizSistema.ObtenerInversa().HasValue) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
+            if (!matrizSistema.esDominante) throw new ArgumentException("La matriz no es dominante");
             if (matrizResultados.numeroFilas != matrizSistema.numeroFilas) throw new ArgumentException($"El vector de resultados debe tener {matrizSistema.numeroFilas} filas");
             if (matrizResultados.numeroColumnas != 1) throw new ArgumentException("Solo puede usarse con un solo vector de resultados");
             if (valorInicial.numeroColumnas != 1) throw new ArgumentException("El valor inicial debe ser un vector columna");
@@ -24,25 +25,6 @@ namespace SistemaEcuaciones.MetodosSistemas
             this.matrizResultados = matrizResultados;
             this.valorInicial = valorInicial;
             this.iteraciones = iteraciones;
-            for (int i = 0; i < this.matrizSistema.numeroFilas; i++)
-            {
-                Double valorComparado = Math.Abs(this.matrizSistema[i,i]);
-                if (!(valorComparado > this.sumaFilaAbsoluta(i, i)))
-                {
-                    throw new ArgumentException("El sistema de ecuaciones no convergera");
-                }
-            }
-        }
-        private Double sumaFilaAbsoluta(Int32 filaObjetivo, Int32 columnaExcluida)
-        {
-            Matriz filaSuma = this.matrizSistema.ObtenerFila(filaObjetivo);
-            Double sumaAbsoluta = 0;
-            for (int i = 0; i < filaSuma.numeroColumnas; i++)
-            {
-                if (i == columnaExcluida) continue;
-                sumaAbsoluta += Math.Abs(filaSuma[0,i]);
-            }
-            return sumaAbsoluta;
         }
         private IEnumerator<ResultadoIteracionJacobi> AproximarSolucion(){
             Matriz solucionAnterior = this.valorInicial;
