@@ -17,8 +17,8 @@ namespace SistemaEcuaciones.MetodosSistemas
             if (matrizSistema.determinante == 0) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
             if (!matrizSistema.esDominante) throw new ArgumentException("La matriz no es dominante");
             if (matrizResultados.numeroFilas != matrizSistema.numeroFilas) throw new ArgumentException($"El vector de resultados debe tener {matrizSistema.numeroFilas} filas");
-            if (matrizResultados.numeroColumnas != 1) throw new ArgumentException("Solo puede usarse con un solo vector de resultados");
-            if (valorInicial.numeroColumnas != 1) throw new ArgumentException("El valor inicial debe ser un vector columna");
+            if (!matrizResultados.esMatrizColumna) throw new ArgumentException("Solo puede usarse con un solo vector de resultados");
+            if (!valorInicial.esMatrizColumna) throw new ArgumentException("El valor inicial debe ser un vector columna");
             if (valorInicial.numeroFilas != matrizSistema.numeroColumnas) throw new ArgumentException("La cantidad de componentes no es igual a las dimensiones del sistema");
             if (iteraciones <= 0) throw new ArgumentOutOfRangeException("Debe ser 1 o mas iteraciones");
             this.matrizSistema = (Matriz)matrizSistema.Clone();

@@ -13,6 +13,20 @@ namespace SistemaEcuaciones
             Boolean columnaValida = columna >= 0 && columna < this.numeroColumnas;
             return filaValida && columnaValida;
         }
+        public Boolean esMatrizColumna
+        {
+            get
+            {
+                return this.numeroColumnas == 1;
+            }
+        }
+        public Boolean esMatrizRenglon
+        {
+            get
+            {
+                return this.numeroFilas == 1;
+            }
+        }
         public Boolean esCuadrada
         {
             get => numeroColumnas == numeroFilas;
