@@ -14,7 +14,7 @@ namespace SistemaEcuaciones.MetodosSistemas
         private readonly Int32 iteraciones;
         public Jacobi(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
         {
-            if (!matrizSistema.ObtenerInversa().HasValue) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
+            if (matrizSistema.determinante == 0) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
             if (!matrizSistema.esDominante) throw new ArgumentException("La matriz no es dominante");
             if (matrizResultados.numeroFilas != matrizSistema.numeroFilas) throw new ArgumentException($"El vector de resultados debe tener {matrizSistema.numeroFilas} filas");
             if (matrizResultados.numeroColumnas != 1) throw new ArgumentException("Solo puede usarse con un solo vector de resultados");
