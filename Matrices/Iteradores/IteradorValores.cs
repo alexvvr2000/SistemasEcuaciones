@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz : IEnumerable<Double>
+    public partial struct Matriz : IEnumerable<Decimal>
     {
-        private IEnumerator<Double> ValoresMatriz()
+        private IEnumerator<Decimal> ValoresMatriz()
         {
             for (int i = 0; i < numeroFilas; i++)
             {
@@ -15,7 +15,7 @@ namespace SistemaEcuaciones
                 }
             }
         }
-        public IEnumerator<Double> GetEnumerator()
+        public IEnumerator<Decimal> GetEnumerator()
         {
             return this.ValoresMatriz();
         }

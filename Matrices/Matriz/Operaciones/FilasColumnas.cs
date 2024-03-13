@@ -5,17 +5,17 @@ namespace SistemaEcuaciones
 {
     partial struct Matriz:ICloneable
     {
-        public Dictionary<string, Func<Matriz, Double>> obtenerFuncionesDimensiones(Matriz valoresDimensionAlta)
+        public Dictionary<string, Func<Matriz, Decimal>> obtenerFuncionesDimensiones(Matriz valoresDimensionAlta)
         {
             if (!this.esCuadrada) throw new InvalidOperationException("La matriz debe ser cuadrada");
             if (!valoresDimensionAlta.esMatrizColumna) throw new InvalidOperationException($"Los valores de la dimension {this.orden + 1} debe ser una matriz columna");
             if (valoresDimensionAlta.numeroFilas != this.numeroColumnas) throw new InvalidOperationException($"Los valores asignados a la dimension {this.orden + 1} deben ser {this.numeroColumnas}");
-            Dictionary<string, Func<Matriz, Double>> funciones = new Dictionary<string, Func<Matriz, double>>();
+            Dictionary<string, Func<Matriz, Decimal>> funciones = new Dictionary<string, Func<Matriz, Decimal>>();
             for (int i = 0; i < this.orden; i++)
             {
                 Matriz filaEvaluada = this.ObtenerFila(i);
                 Int32 numeroComponente = i;
-                Double valorDimensionActual = valoresDimensionAlta[i, 0];
+                Decimal valorDimensionActual = valoresDimensionAlta[i, 0];
                 funciones.Add($"x{i}", matrizResultados =>
                 {
                     if (!matrizResultados.esMatrizColumna) throw new InvalidOperationException($"El vector a evaluar debe ser un vector columna");
@@ -35,7 +35,7 @@ namespace SistemaEcuaciones
             }
             for (int i = 0; i < this.numeroFilas; i++)
             {
-                Double valorTemporal = this[i,columnaDestino];
+                Decimal valorTemporal = this[i,columnaDestino];
                 this[i, columnaDestino] = this[i, columnaOrigen];
                 this[i, columnaOrigen] = valorTemporal;
             }
@@ -49,12 +49,12 @@ namespace SistemaEcuaciones
             {
                 throw new IndexOutOfRangeException("Indice de fila no es valido");
             }
-            double[] filaTemporal = this.matrizBase[filaDestino];
+            Decimal[] filaTemporal = this.matrizBase[filaDestino];
             this.matrizBase[filaDestino] = this.matrizBase[filaOrigen];
             this.matrizBase[filaOrigen] = filaTemporal;
             return this;
         }
-        public Matriz CambiarFila(Double[] filaNueva, Int32 indiceFila)
+        public Matriz CambiarFila(Decimal[] filaNueva, Int32 indiceFila)
         {
             if (!this.IndiceValido(indiceFila, 0))
             {
@@ -87,7 +87,7 @@ namespace SistemaEcuaciones
             }
             return this;
         }
-        public Matriz MultiplicarFila(Int32 indiceFila, Double multiplo)
+        public Matriz MultiplicarFila(Int32 indiceFila, Decimal multiplo)
         {
             if (!this.IndiceValido(indiceFila, 0))
             {
@@ -100,7 +100,7 @@ namespace SistemaEcuaciones
 
             return this;
         }
-        public Matriz SumarFilas(Int32 indiceFilaOrigen, Int32 indiceFilaDestino, Double multiplo)
+        public Matriz SumarFilas(Int32 indiceFilaOrigen, Int32 indiceFilaDestino, Decimal multiplo)
         {
             Boolean filaOrigenValida = this.IndiceValido(indiceFilaOrigen, 0);
             Boolean filaDestinoValido = this.IndiceValido(indiceFilaDestino, 0);

@@ -4,7 +4,7 @@ namespace SistemaEcuaciones
 {
     public partial struct Matriz
     {
-        private readonly Double[][] matrizBase;
+        private readonly Decimal[][] matrizBase;
         public readonly Int32 numeroFilas;
         public readonly Int32 numeroColumnas;
         private Boolean IndiceValido(Int32 fila, Int32 columna)
@@ -46,7 +46,7 @@ namespace SistemaEcuaciones
                 if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
                 for (int i = 0; i < this.numeroFilas; i++)
                 {
-                    Double valorComparado = Math.Abs(this[i, i]);
+                    Decimal valorComparado = Math.Abs(this[i, i]);
                     if (!(valorComparado > this.sumaFilaAbsoluta(i, i)))
                     {
                         Console.WriteLine($"Numero: {valorComparado}, Suma: {this.sumaFilaAbsoluta(i,i)}");
@@ -56,16 +56,16 @@ namespace SistemaEcuaciones
                 return true;
             }
         }
-        public Double determinante
+        public Decimal determinante
         {
             get
             {
                 if (!esCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
                 Matriz copia = (Matriz)this.Clone();
-                Double determinanteTotal = 1;
+                Decimal determinanteTotal = 1;
                 for (int i = 0; i < copia.numeroColumnas; i++)
                 {
-                    Double valorDiagonal = copia[i, i];
+                    Decimal valorDiagonal = copia[i, i];
                     if(valorDiagonal == 0)
                     {
                         Int32? filaCambio = copia.ObtenerFilaValidaAbajo(i,i);
@@ -75,7 +75,7 @@ namespace SistemaEcuaciones
                     }
                     for (int j = i + 1; j < copia.numeroFilas; j++)
                     {
-                        Double escalar = -copia[j, i] / valorDiagonal;
+                        Decimal escalar = -copia[j, i] / valorDiagonal;
                         copia.SumarFilas(i,j,escalar);
                     }
                     determinanteTotal *= valorDiagonal;
@@ -94,9 +94,9 @@ namespace SistemaEcuaciones
             }
             return null;
         }
-        private Double sumaFilaAbsoluta(Int32 filaObjetivo, Int32 columnaExcluida)
+        private Decimal sumaFilaAbsoluta(Int32 filaObjetivo, Int32 columnaExcluida)
         {
-            Double sumaAbsoluta = 0;
+            Decimal sumaAbsoluta = 0;
             for (int i = 0; i < this.numeroColumnas; i++)
             {
                 if (i == columnaExcluida) continue;
@@ -104,7 +104,7 @@ namespace SistemaEcuaciones
             }
             return sumaAbsoluta;
         }
-        public Double this[Int32 indiceFila, Int32 indiceColumna]
+        public Decimal this[Int32 indiceFila, Int32 indiceColumna]
         {
             get
             {

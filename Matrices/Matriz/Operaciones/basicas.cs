@@ -47,7 +47,7 @@ namespace SistemaEcuaciones
             {
                 throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
             }
-            double[,] nuevaMatriz = new double[matriz1.numeroFilas,matriz1.numeroColumnas];
+            Decimal[,] nuevaMatriz = new Decimal[matriz1.numeroFilas,matriz1.numeroColumnas];
             for(int i = 0; i < matriz1.numeroFilas; i++)
             {
                 for (int j = 0; j < matriz1.numeroColumnas; j++)
@@ -69,7 +69,7 @@ namespace SistemaEcuaciones
             {
                 throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
             }
-            double[,] nuevaMatriz = new double[matriz1.numeroFilas,matriz1.numeroColumnas];
+            Decimal[,] nuevaMatriz = new Decimal[matriz1.numeroFilas,matriz1.numeroColumnas];
             for (int i = 0; i < matriz1.numeroFilas; i++)
             {
                 for (int j = 0; j < matriz1.numeroColumnas; j++)
@@ -83,7 +83,7 @@ namespace SistemaEcuaciones
         {
             return -1 * matrizOriginal;
         }
-        public static Matriz operator *(Double escalar,Matriz matrizOriginal)
+        public static Matriz operator *(Decimal escalar,Matriz matrizOriginal)
         {
             Matriz matrizNueva = (Matriz)matrizOriginal.Clone();
             for(int i = 0; i < matrizNueva.numeroFilas; i++)
@@ -98,12 +98,12 @@ namespace SistemaEcuaciones
             {
                 throw new ArgumentException("La matriz 1 debe tener la misma cantidad de columnas que de filas en la matriz 2");
             }
-            Double[,] nuevaMatriz = new Double[matriz1.numeroFilas, matriz2.numeroColumnas];
+            Decimal[,] nuevaMatriz = new Decimal[matriz1.numeroFilas, matriz2.numeroColumnas];
             for (int i = 0; i < matriz1.numeroFilas; i++)
             {
                 for (int j = 0; j < matriz2.numeroColumnas; j++)
                 {
-                    Double suma = 0;
+                    Decimal suma = 0;
                     for (int k = 0; k < matriz1.numeroColumnas; k++)
                     {
                         suma += matriz1[i, k] * matriz2[k, j];

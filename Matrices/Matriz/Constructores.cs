@@ -4,22 +4,22 @@ namespace SistemaEcuaciones
 {
     public partial struct Matriz
     {
-        public Matriz(Double[][] matrizOriginal)
+        public Matriz(Decimal[][] matrizOriginal)
         {
             this.numeroFilas = matrizOriginal.Length;
             this.numeroColumnas = matrizOriginal[0].Length;
-            this.matrizBase = new Double[numeroFilas][];
+            this.matrizBase = new Decimal[numeroFilas][];
             for (Int32 i = 0; i < numeroFilas; i++)
             {
                 if (matrizOriginal[i].Length != this.numeroColumnas)
                 {
                     throw new IndexOutOfRangeException("Las filas deben ser del mismo tamaño");
                 }
-                this.matrizBase[i] = new Double[numeroColumnas];
+                this.matrizBase[i] = new Decimal[numeroColumnas];
                 matrizOriginal[i].CopyTo(this.matrizBase[i], 0);
             }
         }
-        public Matriz(Int32 numeroFilas, Int32 numeroColumnas, Double valorInicial = 0)
+        public Matriz(Int32 numeroFilas, Int32 numeroColumnas, Decimal valorInicial = 0)
         {
             if (numeroFilas <= 0)
             {
@@ -31,10 +31,10 @@ namespace SistemaEcuaciones
             }
             this.numeroColumnas = numeroColumnas;
             this.numeroFilas = numeroFilas;
-            this.matrizBase = new Double[numeroFilas][];
+            this.matrizBase = new Decimal[numeroFilas][];
             for (Int32 i = 0; i < numeroFilas; i++)
             {
-                Double[] arregloNuevo = new Double[numeroColumnas];
+                Decimal[] arregloNuevo = new Decimal[numeroColumnas];
                 if (valorInicial != 0)
                 {
                     Array.Fill(arregloNuevo, valorInicial);
@@ -42,21 +42,21 @@ namespace SistemaEcuaciones
                 this.matrizBase[i] = arregloNuevo;
             }
         }
-        public Matriz(Double[,] matrizOriginal)
+        public Matriz(Decimal[,] matrizOriginal)
         {
             this.numeroFilas = matrizOriginal.GetLength(0);
             this.numeroColumnas = matrizOriginal.GetLength(1);
-            this.matrizBase = new double[this.numeroFilas][];
+            this.matrizBase = new Decimal[this.numeroFilas][];
             for(int i = 0; i < this.numeroFilas; i++)
             {
-                this.matrizBase[i] = new double[this.numeroColumnas];
+                this.matrizBase[i] = new Decimal[this.numeroColumnas];
                 for(int j = 0; j < this.numeroColumnas; j++)
                 {
                     this.matrizBase[i][j] = matrizOriginal[i,j];
                 }
             }
         }
-        public Matriz(Double[] matrizOriginal) : this(1, matrizOriginal.Length)
+        public Matriz(Decimal[] matrizOriginal) : this(1, matrizOriginal.Length)
         {
             matrizOriginal.CopyTo(matrizBase[0], 0);
         }

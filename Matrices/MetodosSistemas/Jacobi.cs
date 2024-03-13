@@ -5,14 +5,14 @@ using System.Collections.Immutable;
 
 namespace SistemaEcuaciones.MetodosSistemas
 {
-    public record ResultadoIteracionJacobi(Int32 iteracion,ImmutableArray<double> componentes,ImmutableDictionary<int, double> errorRelativoComponente);
+    public record ResultadoIteracionJacobi(Int32 iteracion,ImmutableArray<Decimal> componentes,ImmutableDictionary<int, Decimal> errorRelativoComponente);
     public class Jacobi : IEnumerable<ResultadoIteracionJacobi>
     {
         private Matriz matrizSistema;
         private Matriz matrizResultados;
         private Matriz valorInicial;
         private readonly Int32 iteraciones;
-        private Dictionary<string, Func<Matriz, Double>> funcionesComponentesSistema;
+        private Dictionary<string, Func<Matriz, Decimal>> funcionesComponentesSistema;
         public Jacobi(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
         {
             if (matrizSistema.determinante == 0) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
@@ -30,10 +30,10 @@ namespace SistemaEcuaciones.MetodosSistemas
         }
         private IEnumerator<ResultadoIteracionJacobi> AproximarSolucion(){
             Matriz solucionAnterior = this.valorInicial;
-            var erroresRelativos = ImmutableDictionary.CreateBuilder<int, double>();
+            var erroresRelativos = ImmutableDictionary.CreateBuilder<int, Decimal>();
             for (int sol = 0; sol < this.iteraciones; sol++)
             {
-                Double[] componentesTotales = new Double[this.matrizSistema.numeroFilas];
+                Decimal[] componentesTotales = new Decimal[this.matrizSistema.numeroFilas];
                 for (int i = 0; i < this.matrizSistema.numeroFilas; i++)
                 {
                     componentesTotales[i] = this.funcionesComponentesSistema[$"x{i}"](solucionAnterior); ;
@@ -42,12 +42,12 @@ namespace SistemaEcuaciones.MetodosSistemas
                 }
                 yield return new ResultadoIteracionJacobi(
                     sol,
-                    ImmutableArray.Create<Double>(componentesTotales),
+                    ImmutableArray.Create<Decimal>(componentesTotales),
                     erroresRelativos.ToImmutable()
                 );
                 solucionAnterior = ArregloEnMatrizColumna(ref componentesTotales);
             }
-            static Matriz ArregloEnMatrizColumna(ref Double[] componentes)
+            static Matriz ArregloEnMatrizColumna(ref Decimal[] componentes)
             {
                 Matriz nuevaMatriz = new Matriz(componentes.Length, 1);
                 for(int i = 0; i < nuevaMatriz.numeroFilas; i++)

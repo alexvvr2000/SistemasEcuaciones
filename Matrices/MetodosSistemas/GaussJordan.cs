@@ -18,7 +18,7 @@ namespace SistemaEcuaciones
             Matriz matrizResultado = (Matriz)matrizSistema.Clone();
             for (Int32 i = 0; i < matrizAumentada.orden; i++)
             {
-                Double valorDiagonal = matrizAumentada[i, i];
+                Decimal valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0)
                 {
                     Int32? filaDefinidaActual = matrizAumentada.FilaDefinidaAlternativa(i,i);
@@ -30,7 +30,7 @@ namespace SistemaEcuaciones
                 for (Int32 j = 0; j < matrizAumentada.orden; j++)
                 {
                     if (i == j) continue;
-                    Double escalar = -matrizAumentada[j, i]/valorDiagonal;
+                    Decimal escalar = -matrizAumentada[j, i]/valorDiagonal;
                     matrizAumentada.SumarFilas(i, j, escalar);
                     matrizResultado.SumarFilas(i, j, escalar);
                 }
