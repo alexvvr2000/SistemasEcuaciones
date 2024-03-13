@@ -6,14 +6,14 @@ using System.Collections.Immutable;
 namespace SistemaEcuaciones.MetodosSistemas
 {
     public record ResultadoIteracionJacobi(Int32 iteracion,ImmutableArray<Decimal> componentes,ImmutableDictionary<int, Decimal> errorRelativoComponente);
-    public class Jacobi : IEnumerable<ResultadoIteracionJacobi>
+    public class JacobiSuma : IEnumerable<ResultadoIteracionJacobi>
     {
         private Matriz matrizSistema;
         private Matriz matrizResultados;
         private Matriz valorInicial;
         private readonly Int32 iteraciones;
         private Dictionary<string, Func<Matriz, Decimal>> funcionesComponentesSistema;
-        public Jacobi(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
+        public JacobiSuma(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
         {
             if (matrizSistema.determinante == 0) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
             if (!matrizSistema.esDominante) throw new ArgumentException("La matriz no es dominante");
