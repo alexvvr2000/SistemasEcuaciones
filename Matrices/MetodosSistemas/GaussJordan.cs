@@ -27,10 +27,12 @@ namespace SistemaEcuaciones
                     matrizResultado.CambiarFila(i, filaDefinidaActual.Value);
                     valorDiagonal = matrizAumentada[i, i];
                 }
+                matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
+                matrizResultado.MultiplicarFila(i, 1 / valorDiagonal);
                 for (Int32 j = 0; j < matrizAumentada.orden; j++)
                 {
                     if (i == j) continue;
-                    Decimal escalar = -matrizAumentada[j, i]/valorDiagonal;
+                    Decimal escalar = -matrizAumentada[j, i];
                     matrizAumentada.SumarFilas(i, j, escalar);
                     matrizResultado.SumarFilas(i, j, escalar);
                 }
