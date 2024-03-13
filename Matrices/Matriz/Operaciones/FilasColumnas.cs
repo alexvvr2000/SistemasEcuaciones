@@ -5,6 +5,26 @@ namespace SistemaEcuaciones
 {
     partial struct Matriz:ICloneable
     {
+        public Dictionary<string, Func<Matriz, Double>> obtenerFuncionesDimensiones(Matriz valoresDimensionAlta)
+        {
+            if (!this.esCuadrada) throw new InvalidOperationException("La matriz debe ser cuadrada");
+            if (!valoresDimensionAlta.esMatrizColumna) throw new InvalidOperationException($"Los valores de la dimension {this.orden + 1} debe ser una matriz columna");
+            if (valoresDimensionAlta.numeroFilas != this.numeroColumnas) throw new InvalidOperationException($"Los valores asignados a la dimension {this.orden + 1} deben ser {this.numeroColumnas}");
+            Dictionary<string, Func<Matriz, Double>> funciones = new Dictionary<string, Func<Matriz, double>>();
+            for (int i = 0; i < this.orden; i++)
+            {
+                Matriz filaEvaluada = this.ObtenerFila(i);
+                Int32 numeroComponente = i;
+                Double valorDimensionActual = valoresDimensionAlta[i, 0];
+                funciones.Add($"x{i}", matrizResultados =>
+                {
+                    if (!matrizResultados.esMatrizColumna) throw new InvalidOperationException($"El vector a evaluar debe ser un vector columna");
+                    if (filaEvaluada.numeroFilas != matrizResultados.numeroColumnas) throw new InvalidOperationException($"El vector debe tener {filaEvaluada.numeroColumnas} valores con x{numeroComponente} con un valor arbitrario");
+                    return (valorDimensionActual - ((filaEvaluada * matrizResultados)[0, 0] - (filaEvaluada[0, numeroComponente] * matrizResultados[numeroComponente, 0]))) / filaEvaluada[0,numeroComponente];
+                });
+            }
+            return funciones;
+        }
         public Matriz CambiarColumna(Int32 columnaOrigen,Int32 columnaDestino)
         {
             bool origenValido = this.IndiceValido(0, columnaOrigen);

@@ -12,6 +12,7 @@ namespace SistemaEcuaciones.MetodosSistemas
         private Matriz matrizResultados;
         private Matriz valorInicial;
         private readonly Int32 iteraciones;
+        private Dictionary<string, Func<Matriz, Double>> funcionesComponentesSistema;
         public Jacobi(Matriz matrizSistema, Matriz matrizResultados, Matriz valorInicial, Int32 iteraciones)
         {
             if (matrizSistema.determinante == 0) throw new ArgumentException($"El sistema no esta definido en R{matrizSistema.orden}");
@@ -25,6 +26,7 @@ namespace SistemaEcuaciones.MetodosSistemas
             this.matrizResultados = matrizResultados;
             this.valorInicial = valorInicial;
             this.iteraciones = iteraciones;
+            this.funcionesComponentesSistema = matrizSistema.obtenerFuncionesDimensiones(matrizResultados);
         }
         private IEnumerator<ResultadoIteracionJacobi> AproximarSolucion(){
             Matriz solucionAnterior = this.valorInicial;
@@ -34,16 +36,9 @@ namespace SistemaEcuaciones.MetodosSistemas
                 Double[] componentesTotales = new Double[this.matrizSistema.numeroFilas];
                 for (int i = 0; i < this.matrizSistema.numeroFilas; i++)
                 {
-                    Matriz filaActual = this.matrizSistema.ObtenerFila(i);
-                    Double divisor = filaActual[0,i];
-                    Double componenteActualEvaluada = (filaActual*solucionAnterior)[0,0] - filaActual[0, i] * solucionAnterior[i,0];
-                    Double resultadoActual = (this.matrizResultados[i, 0] - componenteActualEvaluada) / divisor;
-                    componentesTotales[i] = resultadoActual;
-                    if (sol == 0) { 
-                        erroresRelativos[i] = -1;
-                        continue;
-                    }
-                    erroresRelativos[i] = Math.Abs((resultadoActual - solucionAnterior[i,0])) / Math.Abs(solucionAnterior[i,0]);
+                    componentesTotales[i] = this.funcionesComponentesSistema[$"x{i}"](solucionAnterior); ;
+                    erroresRelativos[i] = sol == 0? -1 :
+                        Math.Abs((componentesTotales[i] - solucionAnterior[i,0])) / Math.Abs(solucionAnterior[i,0]);
                 }
                 yield return new ResultadoIteracionJacobi(
                     sol,

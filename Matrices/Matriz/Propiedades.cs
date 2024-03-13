@@ -49,6 +49,7 @@ namespace SistemaEcuaciones
                     Double valorComparado = Math.Abs(this[i, i]);
                     if (!(valorComparado > this.sumaFilaAbsoluta(i, i)))
                     {
+                        Console.WriteLine($"Numero: {valorComparado}, Suma: {this.sumaFilaAbsoluta(i,i)}");
                         return false;
                     }
                 }
@@ -99,7 +100,7 @@ namespace SistemaEcuaciones
             for (int i = 0; i < this.numeroColumnas; i++)
             {
                 if (i == columnaExcluida) continue;
-                sumaAbsoluta += Math.Abs(this[0, i]);
+                sumaAbsoluta += Math.Abs(this[filaObjetivo,i]);
             }
             return sumaAbsoluta;
         }
