@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 
 namespace SistemaEcuaciones.MetodosSistemas
 {
-    public record ResultadoIteracionJacobiInversa(int iteracion, Matriz nuevaAproximacion, ImmutableDictionary<int, decimal> errorRelativoComponente);
+    public record ResultadoIteracionJacobiInversa(int Iteracion, Matriz NuevaAproximacion, ImmutableDictionary<int, decimal> ErrorRelativoComponente);
     public class JacobiInversa : IEnumerable<ResultadoIteracionJacobiInversa>
     {
         private readonly Matriz matrizRenglonesNoDiagonales;
