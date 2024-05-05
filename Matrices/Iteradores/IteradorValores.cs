@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz : IEnumerable<Decimal>
+    public partial struct Matriz : IEnumerable<decimal>
     {
-        private IEnumerator<Decimal> ValoresMatriz()
+        private IEnumerator<decimal> ValoresMatriz()
         {
             for (int i = 0; i < numeroFilas; i++)
             {
@@ -15,13 +14,13 @@ namespace SistemaEcuaciones
                 }
             }
         }
-        public IEnumerator<Decimal> GetEnumerator()
+        public IEnumerator<decimal> GetEnumerator()
         {
-            return this.ValoresMatriz();
+            return ValoresMatriz();
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }
