@@ -1,58 +1,57 @@
-﻿using System.Collections;
-using System.Text;
+﻿using System.Text;
 
 namespace SistemaEcuaciones
 {
-    public partial struct Matriz: IEquatable<Matriz>
+    public partial struct Matriz : IEquatable<Matriz>
     {
-        public override Boolean Equals(object? obj)
+        public override readonly bool Equals(object? obj)
         {
             if (obj == null) return false;
-            if (!obj.GetType().Equals(this.GetType())) return false;
-            if (obj.GetHashCode() != this.GetHashCode()) return false;
+            if (!obj.GetType().Equals(GetType())) return false;
+            if (obj.GetHashCode() != GetHashCode()) return false;
             return true;
         }
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return base.GetHashCode();
         }
-        bool IEquatable<Matriz>.Equals(Matriz matriz)
+        readonly bool IEquatable<Matriz>.Equals(Matriz matriz)
         {
             return matriz == this;
         }
-        public static Boolean operator !=(Matriz matriz1, Matriz matriz2)
+        public static bool operator !=(Matriz matriz1, Matriz matriz2)
         {
             return !(matriz1 == matriz2);
         }
-        public static Boolean operator ==(Matriz matriz1, Matriz matriz2)
+        public static bool operator ==(Matriz matriz1, Matriz matriz2)
         {
             bool mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
             bool mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
             if (!(mismasColumnas && mismasFilas)) return false;
             bool mismosValores = true;
-            for(int i = 0; i < matriz1.numeroFilas; i++)
+            for (int i = 0; i < matriz1.numeroFilas; i++)
             {
-                for(int j = 0; j < matriz1.numeroColumnas; j++)
+                for (int j = 0; j < matriz1.numeroColumnas; j++)
                 {
-                    if (matriz1[i,j] != matriz2[i,j]) return false;
+                    if (matriz1[i, j] != matriz2[i, j]) return false;
                 }
             }
             return mismosValores;
         }
         public static Matriz operator +(Matriz matriz1, Matriz matriz2)
         {
-            Boolean mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
-            Boolean mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
+            bool mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
+            bool mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
             if (!(mismasFilas && mismasColumnas))
             {
                 throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
             }
-            Decimal[,] nuevaMatriz = new Decimal[matriz1.numeroFilas,matriz1.numeroColumnas];
-            for(int i = 0; i < matriz1.numeroFilas; i++)
+            decimal[,] nuevaMatriz = new decimal[matriz1.numeroFilas, matriz1.numeroColumnas];
+            for (int i = 0; i < matriz1.numeroFilas; i++)
             {
                 for (int j = 0; j < matriz1.numeroColumnas; j++)
                 {
-                    nuevaMatriz[i,j] = matriz1[i,j] + matriz2[i,j];
+                    nuevaMatriz[i, j] = matriz1[i, j] + matriz2[i, j];
                 }
             }
             return new Matriz(nuevaMatriz);
@@ -63,18 +62,18 @@ namespace SistemaEcuaciones
         }
         public static Matriz operator -(Matriz matriz1, Matriz matriz2)
         {
-            Boolean mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
-            Boolean mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
+            bool mismasFilas = matriz1.numeroFilas == matriz2.numeroFilas;
+            bool mismasColumnas = matriz1.numeroColumnas == matriz2.numeroColumnas;
             if (!(mismasFilas && mismasColumnas))
             {
                 throw new ArgumentException("Las matrices deben ser de las mismas dimensiones");
             }
-            Decimal[,] nuevaMatriz = new Decimal[matriz1.numeroFilas,matriz1.numeroColumnas];
+            decimal[,] nuevaMatriz = new decimal[matriz1.numeroFilas, matriz1.numeroColumnas];
             for (int i = 0; i < matriz1.numeroFilas; i++)
             {
                 for (int j = 0; j < matriz1.numeroColumnas; j++)
                 {
-                    nuevaMatriz[i,j] = matriz1[i, j] - matriz2[i, j];
+                    nuevaMatriz[i, j] = matriz1[i, j] - matriz2[i, j];
                 }
             }
             return new Matriz(nuevaMatriz);
@@ -83,10 +82,10 @@ namespace SistemaEcuaciones
         {
             return -1 * matrizOriginal;
         }
-        public static Matriz operator *(Decimal escalar,Matriz matrizOriginal)
+        public static Matriz operator *(decimal escalar, Matriz matrizOriginal)
         {
             Matriz matrizNueva = (Matriz)matrizOriginal.Clone();
-            for(int i = 0; i < matrizNueva.numeroFilas; i++)
+            for (int i = 0; i < matrizNueva.numeroFilas; i++)
             {
                 matrizNueva.MultiplicarFila(i, escalar);
             }
@@ -94,16 +93,16 @@ namespace SistemaEcuaciones
         }
         public static Matriz operator *(Matriz matriz1, Matriz matriz2)
         {
-            if(matriz1.numeroColumnas != matriz2.numeroFilas)
+            if (matriz1.numeroColumnas != matriz2.numeroFilas)
             {
                 throw new ArgumentException("La matriz 1 debe tener la misma cantidad de columnas que de filas en la matriz 2");
             }
-            Decimal[,] nuevaMatriz = new Decimal[matriz1.numeroFilas, matriz2.numeroColumnas];
+            decimal[,] nuevaMatriz = new decimal[matriz1.numeroFilas, matriz2.numeroColumnas];
             for (int i = 0; i < matriz1.numeroFilas; i++)
             {
                 for (int j = 0; j < matriz2.numeroColumnas; j++)
                 {
-                    Decimal suma = 0;
+                    decimal suma = 0;
                     for (int k = 0; k < matriz1.numeroColumnas; k++)
                     {
                         suma += matriz1[i, k] * matriz2[k, j];
@@ -117,12 +116,13 @@ namespace SistemaEcuaciones
         public override string ToString()
         {
             StringBuilder arregloString = new();
-            for (Int32 i = 0; i < numeroFilas;i++) {
-                for(Int32 j = 0; j < numeroColumnas;j++)
+            for (int i = 0; i < numeroFilas; i++)
+            {
+                for (int j = 0; j < numeroColumnas; j++)
                 {
-                    arregloString.Append($"{this[i,j].ToString("F2")},");
+                    arregloString.Append($"{this[i, j].ToString("F2")},");
                 }
-                arregloString.Remove(arregloString.Length - 1,1);
+                arregloString.Remove(arregloString.Length - 1, 1);
                 arregloString.AppendLine();
             }
             arregloString.Remove(arregloString.Length - 1, 1);
