@@ -1,82 +1,74 @@
-﻿using System;
-
-namespace SistemaEcuaciones
+﻿namespace SistemaEcuaciones
 {
-    public partial struct Matriz
+    public readonly partial struct Matriz
     {
-        public Matriz(Decimal[][] matrizOriginal)
+        public Matriz(decimal[][] matrizOriginal)
         {
-            this.numeroFilas = matrizOriginal.Length;
-            this.numeroColumnas = matrizOriginal[0].Length;
-            this.matrizBase = new Decimal[numeroFilas][];
-            for (Int32 i = 0; i < numeroFilas; i++)
+            numeroFilas = matrizOriginal.Length;
+            numeroColumnas = matrizOriginal[0].Length;
+            matrizBase = new decimal[numeroFilas][];
+            for (int i = 0; i < numeroFilas; i++)
             {
-                if (matrizOriginal[i].Length != this.numeroColumnas)
+                if (matrizOriginal[i].Length != numeroColumnas)
                 {
                     throw new IndexOutOfRangeException("Las filas deben ser del mismo tamaño");
                 }
-                this.matrizBase[i] = new Decimal[numeroColumnas];
-                matrizOriginal[i].CopyTo(this.matrizBase[i], 0);
+                matrizBase[i] = new decimal[numeroColumnas];
+                matrizOriginal[i].CopyTo(matrizBase[i], 0);
             }
         }
-        public Matriz(Int32 numeroFilas, Int32 numeroColumnas, Decimal valorInicial = 0)
+        public Matriz(int numeroFilas, int numeroColumnas, decimal valorInicial = 0)
         {
-            if (numeroFilas <= 0)
-            {
-                throw new ArgumentOutOfRangeException("El numero de filas no es valido");
-            }
-            if (numeroColumnas <= 0)
-            {
-                throw new ArgumentOutOfRangeException("El numero de columnas no es valido");
-            }
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numeroFilas);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numeroColumnas);
             this.numeroColumnas = numeroColumnas;
             this.numeroFilas = numeroFilas;
-            this.matrizBase = new Decimal[numeroFilas][];
-            for (Int32 i = 0; i < numeroFilas; i++)
+            matrizBase = new decimal[numeroFilas][];
+            for (int i = 0; i < numeroFilas; i++)
             {
-                Decimal[] arregloNuevo = new Decimal[numeroColumnas];
+                decimal[] arregloNuevo = new decimal[numeroColumnas];
                 if (valorInicial != 0)
                 {
                     Array.Fill(arregloNuevo, valorInicial);
                 }
-                this.matrizBase[i] = arregloNuevo;
+                matrizBase[i] = arregloNuevo;
             }
         }
-        public Matriz(Decimal[,] matrizOriginal)
+        public Matriz(decimal[,] matrizOriginal)
         {
-            this.numeroFilas = matrizOriginal.GetLength(0);
-            this.numeroColumnas = matrizOriginal.GetLength(1);
-            this.matrizBase = new Decimal[this.numeroFilas][];
-            for(int i = 0; i < this.numeroFilas; i++)
+            numeroFilas = matrizOriginal.GetLength(0);
+            numeroColumnas = matrizOriginal.GetLength(1);
+            matrizBase = new decimal[numeroFilas][];
+            for (int i = 0; i < numeroFilas; i++)
             {
-                this.matrizBase[i] = new Decimal[this.numeroColumnas];
-                for(int j = 0; j < this.numeroColumnas; j++)
+                matrizBase[i] = new decimal[numeroColumnas];
+                for (int j = 0; j < numeroColumnas; j++)
                 {
-                    this.matrizBase[i][j] = matrizOriginal[i,j];
+                    matrizBase[i][j] = matrizOriginal[i, j];
                 }
             }
         }
-        public Matriz(Decimal[] matrizOriginal) : this(1, matrizOriginal.Length)
+        public Matriz(decimal[] matrizOriginal) : this(1, matrizOriginal.Length)
         {
             matrizOriginal.CopyTo(matrizBase[0], 0);
         }
-        public Matriz obtenerMatrizDiagonal()
+        public readonly Matriz obtenerMatrizDiagonal()
         {
-            if (!this.esCuadrada) throw new InvalidOperationException("La matriz debe ser cuadrada");
-            Matriz nuevaMatriz = new Matriz(this.numeroColumnas, this.numeroColumnas);
-            for (int i = 0; i < this.orden; i++)
+            if (!EsCuadrada) throw new InvalidOperationException("La matriz debe ser cuadrada");
+            Matriz nuevaMatriz = new(numeroColumnas, numeroColumnas);
+            for (int i = 0; i < Orden; i++)
             {
                 nuevaMatriz[i, i] = this[i, i];
             }
             return nuevaMatriz;
         }
-        public Matriz obtenerMatrizNoDiagonal()
+        public readonly Matriz obtenerMatrizNoDiagonal()
         {
-            if (!this.esCuadrada) throw new InvalidOperationException("La matriz debe ser cuadrada");
-            Matriz nuevaMatriz = new Matriz(this.numeroColumnas, this.numeroColumnas);
-            for (int i = 0; i <= (this.numeroFilas - 1); i++)
+            if (!EsCuadrada) throw new InvalidOperationException("La matriz debe ser cuadrada");
+            Matriz nuevaMatriz = new(numeroColumnas, numeroColumnas);
+            for (int i = 0; i <= (numeroFilas - 1); i++)
             {
-                for (int j = i+1; j < this.numeroColumnas; j++)
+                for (int j = i + 1; j < numeroColumnas; j++)
                 {
                     nuevaMatriz[i, j] = this[i, j];
                     nuevaMatriz[j, i] = this[j, i];
