@@ -1,27 +1,25 @@
-﻿using System;
-
-namespace SistemaEcuaciones
+﻿namespace SistemaEcuaciones
 {
     public partial struct Matriz
     {
-        public (Matriz, Matriz) AumentarMatriz(Matriz matrizSistema)
+        public readonly (Matriz, Matriz) AumentarMatriz(Matriz matrizSistema)
         {
-            if (!this.esCuadrada)
+            if (!EsCuadrada)
             {
                 throw new InvalidOperationException("Esta matriz no se puede aumentar");
             }
-            if (matrizSistema.numeroFilas != this.numeroFilas)
+            if (matrizSistema.numeroFilas != numeroFilas)
             {
-                throw new InvalidOperationException($"La matriz a aumentar debe tener {this.numeroFilas} filas");
+                throw new InvalidOperationException($"La matriz a aumentar debe tener {numeroFilas} filas");
             }
-            Matriz matrizAumentada = (Matriz)this.Clone();
+            Matriz matrizAumentada = (Matriz)Clone();
             Matriz matrizResultado = (Matriz)matrizSistema.Clone();
-            for (Int32 i = 0; i < matrizAumentada.orden; i++)
+            for (int i = 0; i < matrizAumentada.Orden; i++)
             {
-                Decimal valorDiagonal = matrizAumentada[i, i];
+                decimal valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0)
                 {
-                    Int32? filaDefinidaActual = matrizAumentada.FilaDefinidaAlternativa(i,i);
+                    int? filaDefinidaActual = matrizAumentada.FilaDefinidaAlternativa(i, i);
                     if (!filaDefinidaActual.HasValue) continue;
                     matrizAumentada.CambiarFila(i, filaDefinidaActual.Value);
                     matrizResultado.CambiarFila(i, filaDefinidaActual.Value);
@@ -29,23 +27,23 @@ namespace SistemaEcuaciones
                 }
                 matrizAumentada.MultiplicarFila(i, 1 / valorDiagonal);
                 matrizResultado.MultiplicarFila(i, 1 / valorDiagonal);
-                for (Int32 j = 0; j < matrizAumentada.orden; j++)
+                for (int j = 0; j < matrizAumentada.Orden; j++)
                 {
                     if (i == j) continue;
-                    Decimal escalar = -matrizAumentada[j, i];
+                    decimal escalar = -matrizAumentada[j, i];
                     matrizAumentada.SumarFilas(i, j, escalar);
                     matrizResultado.SumarFilas(i, j, escalar);
                 }
             }
-            return (matrizAumentada,matrizResultado);
+            return (matrizAumentada, matrizResultado);
         }
-        public Int32? FilaDefinidaAlternativa(Int32 filaOrigen, Int32 columnaBusqueda)
+        public readonly int? FilaDefinidaAlternativa(int filaOrigen, int columnaBusqueda)
         {
-            if (!this.IndiceValido(filaOrigen, columnaBusqueda))
+            if (!IndiceValido(filaOrigen, columnaBusqueda))
             {
                 throw new IndexOutOfRangeException("Coordenada de valor base no valido");
             }
-            for(int i=0; i < this.numeroFilas; i++)
+            for (int i = 0; i < numeroFilas; i++)
             {
                 if (i == filaOrigen) continue;
                 if (this[i, columnaBusqueda] == 0) continue;
@@ -53,29 +51,29 @@ namespace SistemaEcuaciones
             }
             return null;
         }
-        public Matriz? ObtenerInversa()
+        public readonly Matriz? ObtenerInversa()
         {
-            if (!this.esCuadrada)
+            if (!EsCuadrada)
             {
                 throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
-            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(this.orden);
-            (Matriz matrizAumentada, Matriz matrizResultado) = this.AumentarMatriz(matrizIdentidad);
-            for (int i = 0; i < matrizAumentada.orden;i++)
+            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(Orden);
+            (Matriz matrizAumentada, Matriz matrizResultado) = AumentarMatriz(matrizIdentidad);
+            for (int i = 0; i < matrizAumentada.Orden; i++)
             {
                 if (matrizAumentada[i, i] != 0) continue;
                 return null;
             }
             return matrizResultado;
         }
-        public static Matriz ObtenerIdentidad(Int32 orden)
+        public static Matriz ObtenerIdentidad(int orden)
         {
             if (orden <= 0)
             {
                 throw new InvalidOperationException("El orden debe ser mayor o igual a 1");
             }
-            Matriz nuevaMatriz = new Matriz(orden, orden);
-            for (Int32 i = 0; i < orden; i++)
+            Matriz nuevaMatriz = new(orden, orden);
+            for (int i = 0; i < orden; i++)
             {
                 nuevaMatriz[i, i] = 1;
             }
