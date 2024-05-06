@@ -32,6 +32,14 @@ static void vandermonde()
         new Vandermonde.PuntoPolinomio(3,6)
     ];
     Vandermonde solucionadorMatriz = new(puntos);
+    Console.WriteLine("Puntos en lista: ");
+    foreach (var punto in puntos)
+    {
+        Console.WriteLine(punto);
+    }
+    Console.Write(Environment.NewLine);
+    Console.WriteLine("Coeficientes: ");
+    Console.WriteLine(solucionadorMatriz.ObtenerCoeficientes());
 }
 
 static void iteradores(Matriz matriz)

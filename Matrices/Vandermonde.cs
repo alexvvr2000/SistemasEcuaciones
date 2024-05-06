@@ -1,10 +1,13 @@
-﻿using static SistemaEcuaciones.IteradorMatriz;
+﻿using System.Collections.Immutable;
+using static SistemaEcuaciones.IteradorMatriz;
 namespace SistemaEcuaciones;
 
 public class Vandermonde
 {
     public record PuntoPolinomio(double ValorX, double ValorY);
     private readonly Matriz CoeficientesSistema;
+    private Matriz? SistemaResuelto;
+    private readonly Matriz resultadosObtenibles;
     public Vandermonde(PuntoPolinomio[] listaPuntos)
     {
         if (listaPuntos.Length <= 1) throw new ArgumentOutOfRangeException(paramName: nameof(listaPuntos), message: "Se debe tener 2 puntos o mas");
@@ -24,5 +27,19 @@ public class Vandermonde
             }
             return matrizCalculada;
         });
+        resultadosObtenibles = new(listaPuntos.Length, 1);
+        resultadosObtenibles.CambiarColumna(
+            (from valor in listaPuntos select (decimal)valor.ValorY).ToArray(), 0
+        );
+    }
+    public Matriz ObtenerCoeficientes()
+    {
+        if (SistemaResuelto.HasValue)
+        {
+            return SistemaResuelto.Value;
+        }
+        Matriz coeficientes = CoeficientesSistema * resultadosObtenibles;
+        SistemaResuelto = coeficientes;
+        return coeficientes;
     }
 }
