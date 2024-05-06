@@ -3,22 +3,26 @@ namespace SistemaEcuaciones;
 
 public class Vandermonde
 {
-    public record PuntoPolinomio(decimal ValorX, decimal ValorY);
-    private readonly Matriz Coeficientes;
+    public record PuntoPolinomio(double ValorX, double ValorY);
+    private readonly Matriz CoeficientesSistema;
     public Vandermonde(PuntoPolinomio[] listaPuntos)
     {
         if (listaPuntos.Length <= 1) throw new ArgumentOutOfRangeException(paramName: nameof(listaPuntos), message: "Se debe tener 2 puntos o mas");
-        Coeficientes = ObtenerCoordenadasColumnas(new Matriz(listaPuntos.Length, listaPuntos.Length))
+        CoeficientesSistema = Enumerable.Range(0, listaPuntos.Length)
         .Aggregate(
             new Matriz(listaPuntos.Length, listaPuntos.Length),
-            (Matriz matrizCalculada, CoordenadaMatriz[] coordenadasFilasN) =>
+            (Matriz matrizCalculada, int columnaActual) =>
         {
-            foreach (CoordenadaMatriz coordenada in coordenadasFilasN)
+            var emparejadoIndex = listaPuntos.Select(
+                (PuntoPolinomio puntoActual, int Indice) => new { puntoActual.ValorX, Indice }
+            );
+            foreach (var punto in emparejadoIndex
+            )
             {
-
+                double nuevoValor = Math.Pow(punto.ValorX, columnaActual);
+                matrizCalculada[punto.Indice, columnaActual] = (decimal)nuevoValor;
             }
             return matrizCalculada;
         });
-        Console.WriteLine(Coeficientes);
     }
 }

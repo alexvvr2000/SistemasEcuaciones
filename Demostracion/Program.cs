@@ -21,7 +21,18 @@ Matriz valorInicial = new(new decimal[,]{
 // jacobiInversa(matrizSistema, resultadoRequerido, valorInicial)
 // jacobiSuma(matrizSistema, resultadoRequerido, valorInicial);
 // gaussJordan(matrizSistema, resultadoRequerido);
-iteradores(matrizSistema);
+// iteradores(matrizSistema);
+vandermonde();
+
+static void vandermonde()
+{
+    Vandermonde.PuntoPolinomio[] puntos = [
+        new Vandermonde.PuntoPolinomio(1,2),
+        new Vandermonde.PuntoPolinomio(2,4),
+        new Vandermonde.PuntoPolinomio(3,6)
+    ];
+    Vandermonde solucionadorMatriz = new(puntos);
+}
 
 static void iteradores(Matriz matriz)
 {
