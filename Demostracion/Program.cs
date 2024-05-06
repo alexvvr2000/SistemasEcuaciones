@@ -26,10 +26,10 @@ vandermonde();
 
 static void vandermonde()
 {
-    Vandermonde.PuntoPolinomio[] puntos = [
-        new Vandermonde.PuntoPolinomio(1,2),
-        new Vandermonde.PuntoPolinomio(2,4),
-        new Vandermonde.PuntoPolinomio(3,6)
+    PuntoPolinomio[] puntos = [
+        new PuntoPolinomio(1,3),
+        new PuntoPolinomio(2,5),
+        new PuntoPolinomio(3,7)
     ];
     Vandermonde solucionadorMatriz = new(puntos);
     Console.WriteLine("Puntos en lista: ");
@@ -38,7 +38,16 @@ static void vandermonde()
         Console.WriteLine(punto);
     }
     Console.Write(Environment.NewLine);
-    Console.WriteLine("Coeficientes: ");
+
+    Console.WriteLine("Matriz del sistema: ");
+    Console.WriteLine(solucionadorMatriz.CoeficientesCalculadosMatriz);
+    Console.Write(Environment.NewLine);
+
+    Console.WriteLine("Resultados a obtener: ");
+    Console.WriteLine(solucionadorMatriz.ResultadosObtenibles);
+    Console.Write(Environment.NewLine);
+
+    Console.WriteLine("Coeficientes de la ecuacion: ");
     Console.WriteLine(solucionadorMatriz.ObtenerCoeficientes());
 }
 

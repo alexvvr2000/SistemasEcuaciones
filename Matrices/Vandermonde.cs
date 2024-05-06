@@ -1,10 +1,22 @@
-﻿using System.Collections.Immutable;
-using static SistemaEcuaciones.IteradorMatriz;
-namespace SistemaEcuaciones;
+﻿namespace SistemaEcuaciones;
 
+public record PuntoPolinomio(double ValorX, double ValorY);
 public class Vandermonde
 {
-    public record PuntoPolinomio(double ValorX, double ValorY);
+    public Matriz ResultadosObtenibles
+    {
+        get
+        {
+            return resultadosObtenibles;
+        }
+    }
+    public Matriz CoeficientesCalculadosMatriz
+    {
+        get
+        {
+            return CoeficientesSistema;
+        }
+    }
     private readonly Matriz CoeficientesSistema;
     private Matriz? SistemaResuelto;
     private readonly Matriz resultadosObtenibles;
@@ -22,7 +34,8 @@ public class Vandermonde
             foreach (var punto in emparejadoIndex
             )
             {
-                double nuevoValor = Math.Pow(punto.ValorX, columnaActual);
+                double nuevoValor = punto.ValorX == 0 && columnaActual == 0
+                    ? 1 : Math.Pow(punto.ValorX, columnaActual);
                 matrizCalculada[punto.Indice, columnaActual] = (decimal)nuevoValor;
             }
             return matrizCalculada;
@@ -38,7 +51,12 @@ public class Vandermonde
         {
             return SistemaResuelto.Value;
         }
-        Matriz coeficientes = CoeficientesSistema * resultadosObtenibles;
+        Matriz? inversaSistema = CoeficientesSistema.ObtenerInversa();
+        if (!inversaSistema.HasValue)
+        {
+            throw new ArgumentException("No es posible calcular una ecuacion que pase por todos los puntos");
+        }
+        Matriz coeficientes = inversaSistema.Value * resultadosObtenibles;
         SistemaResuelto = coeficientes;
         return coeficientes;
     }
