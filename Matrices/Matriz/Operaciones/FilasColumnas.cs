@@ -36,6 +36,31 @@
             }
             return this;
         }
+        public Matriz CambiarColumna(decimal[] nuevosValores, int indiceColumna)
+        {
+            bool columnaValida = IndiceValido(0, indiceColumna);
+            if (!columnaValida)
+            {
+                throw new IndexOutOfRangeException("Indice de destino fuera del rango");
+            }
+            bool listaValida = nuevosValores.Length == numeroFilas;
+            if (!listaValida)
+            {
+                throw new ArgumentException("Numero de columnas no coincide con el de la matriz");
+            }
+            var indicesNuevos =
+                from indiceFila in Enumerable.Range(0, numeroFilas)
+                select new
+                {
+                    indice = indiceFila,
+                    nuevoValor = nuevosValores[indiceFila]
+                };
+            foreach (var nuevoCampo in indicesNuevos)
+            {
+                this[nuevoCampo.indice, indiceColumna] = nuevoCampo.nuevoValor;
+            }
+            return this;
+        }
         public readonly Matriz CambiarFila(int filaOrigen, int filaDestino)
         {
             bool origenValido = IndiceValido(filaOrigen, 0);
