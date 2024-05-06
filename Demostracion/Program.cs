@@ -27,9 +27,19 @@ iteradores(matrizSistema);
 
 static void iteradores(Matriz matriz)
 {
+    Console.WriteLine("Iterador de columnas: ");
     foreach (CoordenadaMatriz[] coordenadasColumnas in ObtenerCoordenadasColumnas(matriz))
     {
         foreach (CoordenadaMatriz coordenadaMatriz in coordenadasColumnas)
+        {
+            Console.WriteLine(coordenadaMatriz);
+        }
+        Console.WriteLine(Environment.NewLine);
+    }
+    Console.WriteLine("Iterador de valores: ");
+    foreach (CoordenadaMatriz[] coordenadaValor in ObtenerCoordenadasValores(matriz))
+    {
+        foreach (CoordenadaMatriz coordenadaMatriz in coordenadaValor)
         {
             Console.WriteLine(coordenadaMatriz);
         }
