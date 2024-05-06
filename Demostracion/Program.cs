@@ -12,13 +12,11 @@ Matriz resultadoRequerido = new(new decimal[,]{
     {9},
     {51 }
 });
-Matriz valorInicial = new(new decimal[,]
-    {
-            {0 },
-            {0 },
-            {0 }
-    }
-);
+Matriz valorInicial = new(new decimal[,]{
+    {0 },
+    {0 },
+    {0 }
+});
 
 // jacobiInversa(matrizSistema, resultadoRequerido, valorInicial)
 // jacobiSuma(matrizSistema, resultadoRequerido, valorInicial);
