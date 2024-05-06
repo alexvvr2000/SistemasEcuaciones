@@ -1,4 +1,7 @@
-﻿namespace SistemaEcuaciones;
+﻿using System.Security.Cryptography;
+using System.Text;
+
+namespace SistemaEcuaciones;
 
 public record PuntoPolinomio(double ValorX, double ValorY);
 public class Vandermonde
@@ -8,13 +11,6 @@ public class Vandermonde
         get
         {
             return resultadosObtenibles;
-        }
-    }
-    public Matriz CoeficientesCalculadosMatriz
-    {
-        get
-        {
-            return CoeficientesSistema;
         }
     }
     private readonly Matriz CoeficientesSistema;
@@ -45,12 +41,9 @@ public class Vandermonde
             (from valor in listaPuntos select (decimal)valor.ValorY).ToArray(), 0
         );
     }
-    public Matriz ObtenerCoeficientes()
+    public Matriz ObtenerCoeficientesResultado()
     {
-        if (SistemaResuelto.HasValue)
-        {
-            return SistemaResuelto.Value;
-        }
+        if (SistemaResuelto.HasValue) return SistemaResuelto.Value;
         Matriz? inversaSistema = CoeficientesSistema.ObtenerInversa();
         if (!inversaSistema.HasValue)
         {
@@ -59,5 +52,79 @@ public class Vandermonde
         Matriz coeficientes = inversaSistema.Value * resultadosObtenibles;
         SistemaResuelto = coeficientes;
         return coeficientes;
+    }
+    public override string ToString()
+    {
+        Matriz coeficientes;
+        try
+        {
+            coeficientes = ObtenerCoeficientesResultado();
+        }
+        catch (ArgumentException)
+        {
+            return "<Coeficientes no pueden ser calculados>";
+        }
+        StringBuilder nuevoFormato = new();
+        nuevoFormato.Append("f(x)=");
+        var coeficientesValidos = Enumerable.Range(0, coeficientes.numeroFilas)
+            .Select(
+                indice =>
+                {
+                    var nuevosValores = new
+                    {
+                        index = indice,
+                        valor = coeficientes[indice, 0],
+                        signo = coeficientes[indice, 0] >= 0 ? '+' : '-'
+                    };
+                    return nuevosValores;
+                }
+            ).Where(valor => valor.valor != 0).Reverse();
+        bool hayUnSoloValor = coeficientesValidos.Count() == 1;
+        var coeficientesFormato = coeficientesValidos.Where(valor => valor.valor != 0).Select(valor =>
+        {
+            if (hayUnSoloValor && esCoeficienteConstante(valor.index))
+            {
+                return valor.valor.ToString();
+            }
+            else if (!hayUnSoloValor && !esCoeficienteConstante(valor.index))
+            {
+                return valor.index switch
+                {
+                    int indice when indice == 1 && !esPrimerValor(indice) => $"{valor.signo}{Math.Abs(valor.valor)}x",
+                    int indice when indice == 1 && esPrimerValor(indice) => $"{valor.valor}x",
+                    int indice when indice != 1 && esPrimerValor(indice) => $"{valor.valor}x^{valor.index}",
+                    _ => $"{valor.signo}{Math.Abs(valor.valor)}x^{valor.index}"
+                };
+            }
+            else if (!hayUnSoloValor && esCoeficienteConstante(valor.index))
+            {
+                return $"{valor.signo}{Math.Abs(valor.valor)}";
+            }
+            else if (hayUnSoloValor && !esCoeficienteConstante(valor.index))
+            {
+                return valor.index switch
+                {
+                    int indice when indice == 1 && valor.valor != 1 => $"{valor.valor}x",
+                    int indice when indice == 1 && valor.valor == 1 => $"x",
+                    int indice when indice != 1 && valor.valor == 1 => $"x^{indice}",
+                    _ => $"{valor.valor}x^{valor.index}"
+                };
+            }
+            return "";
+        });
+        foreach (string coeficienteNuevo in coeficientesFormato)
+        {
+            nuevoFormato.Append(coeficienteNuevo);
+        }
+        return nuevoFormato.ToString();
+        bool esCoeficienteConstante(int indice)
+        {
+            return indice == 0;
+        }
+        bool esPrimerValor(int indice)
+        {
+            int primerCoeficiente = coeficientesValidos.First().index;
+            return primerCoeficiente == indice;
+        }
     }
 }
