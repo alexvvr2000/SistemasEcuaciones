@@ -1,5 +1,7 @@
 ﻿using SistemaEcuaciones;
 using SistemaEcuaciones.MetodosSistemas;
+using static SistemaEcuaciones.IteradorMatriz;
+
 Matriz matrizSistema = new(new decimal[,] {
     {10,1,2},
     {4,6,-1},
@@ -18,9 +20,22 @@ Matriz valorInicial = new(new decimal[,]
     }
 );
 
-//jacobiInversa(matrizSistema, resultadoRequerido, valorInicial)
+// jacobiInversa(matrizSistema, resultadoRequerido, valorInicial)
 // jacobiSuma(matrizSistema, resultadoRequerido, valorInicial);
-gaussJordan(matrizSistema, resultadoRequerido);
+// gaussJordan(matrizSistema, resultadoRequerido);
+iteradores(matrizSistema);
+
+static void iteradores(Matriz matriz)
+{
+    foreach (CoordenadaMatriz[] coordenadasColumnas in ObtenerCoordenadasColumnas(matriz))
+    {
+        foreach (CoordenadaMatriz coordenadaMatriz in coordenadasColumnas)
+        {
+            Console.WriteLine(coordenadaMatriz);
+        }
+        Console.WriteLine(Environment.NewLine);
+    }
+}
 
 static void gaussJordan(Matriz matrizSistema, Matriz resultadoRequerido)
 {
