@@ -57,7 +57,7 @@
             {
                 throw new InvalidOperationException("Esta matriz no aplica para inversa");
             }
-            Matriz matrizIdentidad = Matriz.ObtenerIdentidad(Orden);
+            Matriz matrizIdentidad = ObtenerIdentidad(Orden);
             (Matriz matrizAumentada, Matriz matrizResultado) = AumentarMatriz(matrizIdentidad);
             for (int i = 0; i < matrizAumentada.Orden; i++)
             {
