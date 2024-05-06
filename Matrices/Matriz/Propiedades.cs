@@ -30,13 +30,23 @@
                 for (int i = 0; i < numeroFilas; i++)
                 {
                     decimal valorComparado = Math.Abs(this[i, i]);
-                    if (!(valorComparado > SumaFilaAbsoluta(i, i)))
+                    decimal sumaFilaAbsoluta = SumaFilaAbsoluta(this.matrizBase, i, i);
+                    if (!(valorComparado > sumaFilaAbsoluta))
                     {
-                        Console.WriteLine($"Numero: {valorComparado}, Suma: {SumaFilaAbsoluta(i, i)}");
                         return false;
                     }
                 }
                 return true;
+                static decimal SumaFilaAbsoluta(decimal[][] matriz, int filaObjetivo, int columnaExcluida)
+                {
+                    decimal sumaAbsoluta = 0;
+                    for (int i = 0; i < matriz[0].Length; i++)
+                    {
+                        if (i == columnaExcluida) continue;
+                        sumaAbsoluta += Math.Abs(matriz[filaObjetivo][i]);
+                    }
+                    return sumaAbsoluta;
+                }
             }
         }
         public readonly decimal Determinante
@@ -51,7 +61,7 @@
                     decimal valorDiagonal = copia[i, i];
                     if (valorDiagonal == 0)
                     {
-                        int? filaCambio = copia.ObtenerFilaValidaAbajo(i, i);
+                        int? filaCambio = ObtenerFilaValidaAbajo(ref copia, i, i);
                         if (!filaCambio.HasValue) return 0;
                         copia.CambiarColumna(filaCambio.Value, i);
                         valorDiagonal = copia[i, i];
@@ -64,28 +74,18 @@
                     determinanteTotal *= valorDiagonal;
                 }
                 return determinanteTotal;
+                static int? ObtenerFilaValidaAbajo(ref Matriz matriz, int filaInicial, int columnaBusqueda)
+                {
+                    if (!matriz.EsCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
+                    if (!matriz.IndiceValido(filaInicial, columnaBusqueda)) throw new IndexOutOfRangeException("No se introdujo una coordenada valida");
+                    if (filaInicial == (matriz.numeroFilas - 1)) return null;
+                    for (int i = filaInicial; i < matriz.Orden; i++)
+                    {
+                        if (matriz[i, columnaBusqueda] != 0) return i;
+                    }
+                    return null;
+                }
             }
-        }
-        private readonly int? ObtenerFilaValidaAbajo(int filaInicial, int columnaBusqueda)
-        {
-            if (!EsCuadrada) throw new InvalidOperationException("La matriz no es cuadrada");
-            if (!IndiceValido(filaInicial, columnaBusqueda)) throw new IndexOutOfRangeException("No se introdujo una coordenada valida");
-            if (filaInicial == (numeroFilas - 1)) return null;
-            for (int i = filaInicial; i < Orden; i++)
-            {
-                if (this[i, columnaBusqueda] != 0) return i;
-            }
-            return null;
-        }
-        private readonly decimal SumaFilaAbsoluta(int filaObjetivo, int columnaExcluida)
-        {
-            decimal sumaAbsoluta = 0;
-            for (int i = 0; i < numeroColumnas; i++)
-            {
-                if (i == columnaExcluida) continue;
-                sumaAbsoluta += Math.Abs(this[filaObjetivo, i]);
-            }
-            return sumaAbsoluta;
         }
         public readonly decimal this[int indiceFila, int indiceColumna]
         {
