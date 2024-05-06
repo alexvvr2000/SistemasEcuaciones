@@ -3,8 +3,8 @@ using System.Collections.Immutable;
 
 namespace SistemaEcuaciones.MetodosSistemas
 {
-    public record ResultadoIteracionJacobiInversa(int Iteracion, Matriz NuevaAproximacion, ImmutableDictionary<int, decimal> ErrorRelativoComponente);
-    public class JacobiInversa : IEnumerable<ResultadoIteracionJacobiInversa>
+    public record ResultadoJacobi(int Iteracion, Matriz NuevaAproximacion, ImmutableDictionary<int, decimal> ErrorRelativoComponente);
+    public class JacobiInversa : IEnumerable<ResultadoJacobi>
     {
         private readonly Matriz matrizRenglonesNoDiagonales;
         private readonly Matriz matrizInversaDiagonal;
@@ -27,7 +27,7 @@ namespace SistemaEcuaciones.MetodosSistemas
             this.matrizResultados = matrizResultados;
             this.iteraciones = iteraciones;
         }
-        private IEnumerator<ResultadoIteracionJacobiInversa> AproximarFuncion()
+        private IEnumerator<ResultadoJacobi> AproximarFuncion()
         {
             Matriz valorAproximadoAnterior = valorInicial;
             var erroresRelativos = ImmutableDictionary.CreateBuilder<int, decimal>();
@@ -39,11 +39,11 @@ namespace SistemaEcuaciones.MetodosSistemas
                     erroresRelativos[j] = i == 0 ? -1
                         : Math.Abs(valorAproximadoActual[j, 0] - valorAproximadoAnterior[j, 0]) / Math.Abs(valorAproximadoActual[j, 0]);
                 }
-                yield return new ResultadoIteracionJacobiInversa(i, valorAproximadoActual, erroresRelativos.ToImmutable());
+                yield return new ResultadoJacobi(i, valorAproximadoActual, erroresRelativos.ToImmutable());
                 valorAproximadoAnterior = valorAproximadoActual;
             }
         }
-        public IEnumerator<ResultadoIteracionJacobiInversa> GetEnumerator()
+        public IEnumerator<ResultadoJacobi> GetEnumerator()
         {
             return AproximarFuncion();
         }

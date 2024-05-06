@@ -67,7 +67,7 @@ static void jacobiInversa(Matriz matrizSistema, Matriz resultadoRequerido, Matri
 
     try
     {
-        foreach (ResultadoIteracionJacobiInversa iteracion in new JacobiInversa(matrizSistema, resultadoRequerido, valorInicial, 7))
+        foreach (ResultadoJacobi iteracion in new JacobiInversa(matrizSistema, resultadoRequerido, valorInicial, 7))
         {
             Console.WriteLine($"Iteracion actual: {iteracion.Iteracion + 1}");
             for (int i = 0; i < iteracion.NuevaAproximacion.numeroFilas; i++)
