@@ -27,6 +27,26 @@ public static class IteradorMatriz
             yield return coordenadasColumnas;
         }
     }
+    private static IEnumerable<CoordenadaMatriz> IteradorDiagonal(Matriz matrizOriginal, bool reversa = false)
+    {
+        if (!matrizOriginal.EsCuadrada) throw new ArgumentException("La matriz debe ser cuadrada");
+        for (int i = 0; i < matrizOriginal.Orden; i++)
+        {
+            if (reversa)
+            {
+                int coordenadaActual = matrizOriginal.Orden - i;
+                yield return new CoordenadaMatriz(coordenadaActual, coordenadaActual);
+            }
+            else
+            {
+                yield return new CoordenadaMatriz(i, i);
+            }
+        }
+    }
+    public static IEnumerable<CoordenadaMatriz> ObtenerCoordenadasDiagonal(Matriz matrizOriginal, bool reversa = false)
+    {
+        return IteradorDiagonal(matrizOriginal, reversa);
+    }
     public static IEnumerable<CoordenadaMatriz[]> ObtenerCoordenadasValores(Matriz matrizOriginal)
     {
         return IteradorValores(matrizOriginal);

@@ -45,6 +45,18 @@ static void iteradores(Matriz matriz)
         }
         Console.WriteLine(Environment.NewLine);
     }
+    Console.WriteLine("Iterador de la diagonal...");
+    Console.WriteLine("En reversa: ");
+    foreach (CoordenadaMatriz coordenadaMatriz in ObtenerCoordenadasDiagonal(matriz, true))
+    {
+        Console.WriteLine(coordenadaMatriz);
+    }
+    Console.Write(Environment.NewLine);
+    Console.WriteLine("En orden normal:");
+    foreach (CoordenadaMatriz coordenadaMatriz in ObtenerCoordenadasDiagonal(matriz, false))
+    {
+        Console.WriteLine(coordenadaMatriz);
+    }
 }
 
 static void gaussJordan(Matriz matrizSistema, Matriz resultadoRequerido)
