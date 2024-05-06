@@ -19,7 +19,7 @@
                 decimal valorDiagonal = matrizAumentada[i, i];
                 if (valorDiagonal == 0)
                 {
-                    int? filaDefinidaActual = matrizAumentada.FilaDefinidaAlternativa(i, i);
+                    int? filaDefinidaActual = FilaDefinidaAlternativa(ref matrizAumentada, i, i);
                     if (!filaDefinidaActual.HasValue) continue;
                     matrizAumentada.CambiarFila(i, filaDefinidaActual.Value);
                     matrizResultado.CambiarFila(i, filaDefinidaActual.Value);
@@ -36,20 +36,20 @@
                 }
             }
             return (matrizAumentada, matrizResultado);
-        }
-        public readonly int? FilaDefinidaAlternativa(int filaOrigen, int columnaBusqueda)
-        {
-            if (!IndiceValido(filaOrigen, columnaBusqueda))
+            static int? FilaDefinidaAlternativa(ref Matriz matriz, int filaOrigen, int columnaBusqueda)
             {
-                throw new IndexOutOfRangeException("Coordenada de valor base no valido");
+                if (!matriz.IndiceValido(filaOrigen, columnaBusqueda))
+                {
+                    throw new IndexOutOfRangeException("Coordenada de valor base no valido");
+                }
+                for (int i = 0; i < matriz.numeroFilas; i++)
+                {
+                    if (i == filaOrigen) continue;
+                    if (matriz[i, columnaBusqueda] == 0) continue;
+                    return i;
+                }
+                return null;
             }
-            for (int i = 0; i < numeroFilas; i++)
-            {
-                if (i == filaOrigen) continue;
-                if (this[i, columnaBusqueda] == 0) continue;
-                return i;
-            }
-            return null;
         }
         public readonly Matriz? ObtenerInversa()
         {
