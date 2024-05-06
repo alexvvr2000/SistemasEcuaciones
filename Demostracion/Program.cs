@@ -18,7 +18,22 @@ Matriz valorInicial = new(new decimal[,]
     }
 );
 
-jacobiSuma(matrizSistema, resultadoRequerido, valorInicial);
+//jacobiInversa(matrizSistema, resultadoRequerido, valorInicial)
+// jacobiSuma(matrizSistema, resultadoRequerido, valorInicial);
+gaussJordan(matrizSistema, resultadoRequerido);
+
+static void gaussJordan(Matriz matrizSistema, Matriz resultadoRequerido)
+{
+    Console.WriteLine("Matriz del sistema: ");
+    Console.Write($"{matrizSistema}{Environment.NewLine}{Environment.NewLine}");
+    Console.WriteLine("Resultados a obtener: ");
+    Console.Write($"{resultadoRequerido}{Environment.NewLine}{Environment.NewLine}");
+    Matriz inversaSistema = matrizSistema.ObtenerInversa() ?? throw new ArgumentException("Matriz no tiene inversa definida");
+    Console.WriteLine("Inversa del sistema:");
+    Console.Write($"{inversaSistema}{Environment.NewLine}{Environment.NewLine}");
+    Console.WriteLine("Vector de resultados: ");
+    Console.Write($"{inversaSistema * resultadoRequerido}{Environment.NewLine}{Environment.NewLine}");
+}
 
 static void jacobiSuma(Matriz matrizSistema, Matriz resultadoRequerido, Matriz valorInicial)
 {
@@ -35,7 +50,7 @@ static void jacobiSuma(Matriz matrizSistema, Matriz resultadoRequerido, Matriz v
 
     try
     {
-        foreach (ResultadoJacobi iteracion in new JacobiInversa(matrizSistema, resultadoRequerido, valorInicial, 7))
+        foreach (ResultadoJacobi iteracion in new JacobiSuma(matrizSistema, resultadoRequerido, valorInicial, 7))
         {
             Console.WriteLine($"Iteracion actual: {iteracion.Iteracion + 1}");
             for (int i = 0; i < iteracion.NuevaAproximacion.numeroFilas; i++)
