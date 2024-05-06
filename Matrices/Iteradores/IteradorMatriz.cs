@@ -15,7 +15,7 @@ public static class IteradorMatriz
             yield return coordenadasColumnas;
         }
     }
-    private static IEnumerable<CoordenadaMatriz[]> IteradorValores(Matriz matrizOriginal)
+    private static IEnumerable<CoordenadaMatriz[]> IteradorFilas(Matriz matrizOriginal)
     {
         for (int i = 0; i < matrizOriginal.numeroFilas; i++)
         {
@@ -47,9 +47,9 @@ public static class IteradorMatriz
     {
         return IteradorDiagonal(matrizOriginal, reversa);
     }
-    public static IEnumerable<CoordenadaMatriz[]> ObtenerCoordenadasValores(Matriz matrizOriginal)
+    public static IEnumerable<CoordenadaMatriz[]> ObtenerCoordenadasFilas(Matriz matrizOriginal)
     {
-        return IteradorValores(matrizOriginal);
+        return IteradorFilas(matrizOriginal);
     }
     public static IEnumerable<CoordenadaMatriz[]> ObtenerCoordenadasColumnas(Matriz matrizOriginal)
     {

@@ -35,7 +35,7 @@ static void iteradores(Matriz matriz)
         Console.WriteLine(Environment.NewLine);
     }
     Console.WriteLine("Iterador de valores: ");
-    foreach (CoordenadaMatriz[] coordenadaValor in ObtenerCoordenadasValores(matriz))
+    foreach (CoordenadaMatriz[] coordenadaValor in ObtenerCoordenadasFilas(matriz))
     {
         foreach (CoordenadaMatriz coordenadaMatriz in coordenadaValor)
         {
