@@ -35,12 +35,12 @@ static void jacobiSuma(Matriz matrizSistema, Matriz resultadoRequerido, Matriz v
 
     try
     {
-        foreach (ResultadoIteracionJacobi iteracion in new JacobiSuma(matrizSistema, resultadoRequerido, valorInicial, 7))
+        foreach (ResultadoJacobi iteracion in new JacobiInversa(matrizSistema, resultadoRequerido, valorInicial, 7))
         {
             Console.WriteLine($"Iteracion actual: {iteracion.Iteracion + 1}");
-            for (int i = 0; i < iteracion.Componentes.Length; i++)
+            for (int i = 0; i < iteracion.NuevaAproximacion.numeroFilas; i++)
             {
-                Console.WriteLine($"X_{i + 1}: {iteracion.Componentes[i]}, Error relativo: {iteracion.ErrorRelativoComponente[i]}");
+                Console.WriteLine($"X_{i + 1}: {iteracion.NuevaAproximacion[i, 0]}, Error relativo: {iteracion.ErrorRelativoComponente[i]}");
             }
             Console.WriteLine();
         }

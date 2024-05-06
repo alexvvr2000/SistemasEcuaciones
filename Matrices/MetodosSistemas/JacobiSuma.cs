@@ -3,8 +3,7 @@ using System.Collections.Immutable;
 
 namespace SistemaEcuaciones.MetodosSistemas
 {
-    public record ResultadoIteracionJacobi(int Iteracion, ImmutableArray<decimal> Componentes, ImmutableDictionary<int, decimal> ErrorRelativoComponente);
-    public class JacobiSuma : IEnumerable<ResultadoIteracionJacobi>
+    public class JacobiSuma : IEnumerable<ResultadoJacobi>
     {
         private readonly Matriz matrizSistema;
         private readonly Matriz valorInicial;
@@ -24,37 +23,28 @@ namespace SistemaEcuaciones.MetodosSistemas
             this.iteraciones = iteraciones;
             funcionesComponentesSistema = matrizSistema.ObtenerFuncionesDimensiones(matrizResultados);
         }
-        private IEnumerator<ResultadoIteracionJacobi> AproximarSolucion()
+        private IEnumerator<ResultadoJacobi> AproximarSolucion()
         {
             Matriz solucionAnterior = valorInicial;
             var erroresRelativos = ImmutableDictionary.CreateBuilder<int, decimal>();
             for (int sol = 0; sol < iteraciones; sol++)
             {
-                decimal[] componentesTotales = new decimal[matrizSistema.numeroFilas];
+                Matriz componentesTotales = new(this.matrizSistema.numeroFilas, 1);
                 for (int i = 0; i < matrizSistema.numeroFilas; i++)
                 {
-                    componentesTotales[i] = funcionesComponentesSistema[$"x{i}"](solucionAnterior); ;
+                    componentesTotales[i, 0] = funcionesComponentesSistema[$"x{i}"](solucionAnterior); ;
                     erroresRelativos[i] = sol == 0 ? -1 :
-                        Math.Abs(componentesTotales[i] - solucionAnterior[i, 0]) / Math.Abs(solucionAnterior[i, 0]);
+                        Math.Abs(componentesTotales[i, 0] - solucionAnterior[i, 0]) / Math.Abs(solucionAnterior[i, 0]);
                 }
-                yield return new ResultadoIteracionJacobi(
+                yield return new ResultadoJacobi(
                     sol,
-                    ImmutableArray.Create<decimal>(componentesTotales),
+                    componentesTotales,
                     erroresRelativos.ToImmutable()
                 );
-                solucionAnterior = ArregloEnMatrizColumna(ref componentesTotales);
-            }
-            static Matriz ArregloEnMatrizColumna(ref decimal[] componentes)
-            {
-                Matriz nuevaMatriz = new(componentes.Length, 1);
-                for (int i = 0; i < nuevaMatriz.numeroFilas; i++)
-                {
-                    nuevaMatriz[i, 0] = componentes[i];
-                }
-                return nuevaMatriz;
+                solucionAnterior = componentesTotales;
             }
         }
-        public IEnumerator<ResultadoIteracionJacobi> GetEnumerator()
+        public IEnumerator<ResultadoJacobi> GetEnumerator()
         {
             return AproximarSolucion();
         }
